@@ -22,7 +22,7 @@ const WorkspaceOverview: React.FC = () => {
       </div>
 
       <Card title="Redux Toolkit 状态管理" className="content-section">
-        <Space direction="vertical" size="large">
+        <Space orientation="vertical" size="large">
           <Text strong style={{ fontSize: "18px" }}>
             Current Count: {count}
           </Text>
@@ -30,9 +30,7 @@ const WorkspaceOverview: React.FC = () => {
             <Button type="primary" onClick={() => dispatch(increment())}>
               Increment
             </Button>
-            <Button onClick={() => dispatch(decrement())}>
-              Decrement
-            </Button>
+            <Button onClick={() => dispatch(decrement())}>Decrement</Button>
             <Button onClick={() => dispatch(incrementByAmount(5))}>
               Increment by 5
             </Button>
@@ -61,7 +59,7 @@ const WorkspaceOverview: React.FC = () => {
           name="my-child-app"
           url="http://localhost:3000/"
           iframe
-          defaultPage="http://localhost:3000/"
+          baseroute="/workspace/overview"
         ></micro-app>
         <div style={{ position: "absolute", pointerEvents: "none" }}>
           <Text type="secondary">
