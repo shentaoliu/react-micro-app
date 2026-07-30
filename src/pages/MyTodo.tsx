@@ -19,6 +19,8 @@ function MyTodo() {
   const [normalLoading, setNormalLoading] = useState(false);
   const [corsLoading, setCorsLoading] = useState(false);
   const [corsResult, setCorsResult] = useState("");
+  const [nginxLoading, setNginxLoading] = useState(false);
+  const [nginxResult, setNginxResult] = useState("");
 
   // --- postMessage 相关状态 ---
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -167,6 +169,33 @@ function MyTodo() {
     }
   };
 
+  // --- Nginx 代理跨域请求示例 ---
+  const handleNginxRequest = async () => {
+    setNginxLoading(true);
+    setNginxResult("");
+    try {
+      // 注意这里请求的是当前的相对路径（同源），而不是直接请求 3001 端口
+      // 实际上，开发环境下这个请求会被 Vite 的 proxy 拦截并转发，
+      // 生产环境下则由 Nginx 的 location /api 拦截并转发。
+      const response = await fetch("/api/data");
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("代理请求成功:", data);
+      setNginxResult(JSON.stringify(data, null, 2));
+      message.success("通过代理访问接口成功");
+    } catch (error: any) {
+      console.error("代理请求失败:", error);
+      message.error(`代理请求失败: ${error.message}`);
+      setNginxResult(`请求失败: ${error.message}`);
+    } finally {
+      setNginxLoading(false);
+    }
+  };
+
   return (
     <Card style={{ minHeight: "100%", maxWidth: "800px" }}>
       <Title level={4} style={{ marginBottom: 16 }}>
@@ -218,9 +247,9 @@ function MyTodo() {
         5173），因此两者之间存在跨域。
         <br />
         <br />
-        <Text strong style={{ color: "#52c41a" }}>
-          Node 服务已经手动配置了 CORS 响应头
-          (Access-Control-Allow-Origin)，点击下方按钮将成功获取数据！
+        <Text strong type="danger">
+          目前 Node 服务为了演示代理功能，再次关闭了 CORS
+          响应头，点击下方按钮将看到跨域拦截报错！
         </Text>
       </Paragraph>
       <div style={{ marginBottom: "16px" }}>
@@ -245,6 +274,48 @@ function MyTodo() {
       >
         {corsResult ? (
           <pre style={{ margin: 0 }}>{corsResult}</pre>
+        ) : (
+          <Text style={{ color: "#5c6370" }}>等待请求数据...</Text>
+        )}
+      </div>
+
+      <Divider style={{ margin: "40px 0" }} />
+
+      {/* --- Nginx/Vite 代理跨域请求示例区域 --- */}
+      <Title level={4} style={{ marginBottom: 16 }}>
+        反向代理跨域示例 (Vite Proxy / Nginx)
+      </Title>
+      <Paragraph type="secondary">
+        当后端无法修改 CORS 头时，前端通常通过配置反向代理来解决跨域。
+        其原理是：同源策略是浏览器的限制，服务器之间请求没有这个限制。前端先将请求发给同源的代理服务器，由代理服务器转发给真实的后端服务器。
+        <br />
+        <br />
+        开发环境下配置 <code>vite.config.ts</code> 中的 proxy，生产环境下配置
+        Nginx 的 <code>location</code>。 前端代码只需要请求相对路径（如{" "}
+        <code>/api/xxx</code>）。
+      </Paragraph>
+      <div style={{ marginBottom: "16px" }}>
+        <Button
+          type="primary"
+          onClick={handleNginxRequest}
+          loading={nginxLoading}
+          style={{ background: "#722ed1", borderColor: "#722ed1" }}
+        >
+          发送代理请求 (请求 /api/data)
+        </Button>
+      </div>
+      <div
+        style={{
+          background: "#282c34",
+          color: "#abb2bf",
+          padding: "12px",
+          borderRadius: "4px",
+          minHeight: "80px",
+          fontFamily: "monospace",
+        }}
+      >
+        {nginxResult ? (
+          <pre style={{ margin: 0 }}>{nginxResult}</pre>
         ) : (
           <Text style={{ color: "#5c6370" }}>等待请求数据...</Text>
         )}
