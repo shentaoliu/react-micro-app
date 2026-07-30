@@ -247,9 +247,9 @@ function MyTodo() {
         5173），因此两者之间存在跨域。
         <br />
         <br />
-        <Text strong type="danger">
-          目前 Node 服务为了演示代理功能，再次关闭了 CORS
-          响应头，点击下方按钮将看到跨域拦截报错！
+        <Text strong style={{ color: "#52c41a" }}>
+          Node 服务已经手动配置了 CORS 响应头
+          (Access-Control-Allow-Origin)，点击下方按钮将成功获取数据！
         </Text>
       </Paragraph>
       <div style={{ marginBottom: "16px" }}>
