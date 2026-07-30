@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "../App";
 import WorkspaceOverview from "../pages/WorkspaceOverview";
 import PlaceholderPage from "../pages/PlaceholderPage";
+import MyTodo from "../pages/MyTodo";
 
 export const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "todo",
-            element: <PlaceholderPage title="我的待办" />,
+            element: <MyTodo />,
           },
           {
             path: "tools",

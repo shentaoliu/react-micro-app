@@ -52,7 +52,7 @@ function getItem(
 const sideMenuMap: Record<string, MenuItem[]> = {
   [TOP_MENU_KEYS.WORKSPACE]: [
     getItem("总览看板", "overview", <PieChartOutlined />),
-    getItem("我的待办", "todo", <AppstoreOutlined />),
+    getItem("跨域请求示例", "todo", <AppstoreOutlined />),
     getItem("快捷工具", "tools", <ToolOutlined />),
   ],
   [TOP_MENU_KEYS.APPS]: [

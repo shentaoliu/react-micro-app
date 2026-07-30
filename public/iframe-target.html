@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iframe PostMessage Target</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      background-color: #f0f2f5;
+      color: #333;
+      border: 1px dashed #1890ff;
+      border-radius: 8px;
+    }
+    .container {
+      background: white;
+      padding: 16px;
+      border-radius: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    h3 { margin-top: 0; color: #1890ff; font-size: 16px; }
+    .log-box {
+      background: #fafafa;
+      border: 1px solid #d9d9d9;
+      padding: 8px;
+      height: 120px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+    button {
+      background: #1890ff;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover { background: #40a9ff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>这是一个模拟跨域的 iframe 页面</h3>
+    <p style="font-size: 12px; color: #666;">监听来自父窗口的消息，并可回复消息。</p>
+    
+    <div class="log-box" id="logBox"></div>
+    
+    <button onclick="replyToParent()">回复消息给父窗口</button>
+  </div>
+
+  <script>
+    const logBox = document.getElementById('logBox');
+    let parentOrigin = '';
+    let parentWindow = null;
+
+    function log(msg, color = '#333') {
+      const div = document.createElement('div');
+      div.style.color = color;
+      div.style.marginBottom = '4px';
+      div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      logBox.appendChild(div);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    // 监听来自父窗口的消息
+    window.addEventListener('message', (event) => {
+      // 真实项目中应该校验 event.origin 以确保安全
+      // if (event.origin !== "http://localhost:5173") return;
+      
+      parentOrigin = event.origin;
+      parentWindow = event.source;
+
+      log(`收到父窗口消息: ${JSON.stringify(event.data)}`, '#1890ff');
+      
+      // 可以在这里处理收到的数据并自动回复
+      if (event.data && event.data.type === 'GREETING') {
+        log('处理消息中...', '#fa8c16');
+      }
+    });
+
+    // 主动发送消息给父窗口
+    function replyToParent() {
+      if (!parentWindow) {
+        log('尚未收到父窗口消息，无法获取父窗口引用！', '#f5222d');
+        return;
+      }
+      
+      const replyData = {
+        type: 'REPLY',
+        message: 'Hello Parent! 收到你的消息了。',
+        timestamp: Date.now()
+      };
+      
+      log(`发送回复: ${JSON.stringify(replyData)}`, '#52c41a');
+      
+      // 使用 event.source (即 parentWindow) 回传消息
+      // event.origin 作为 targetOrigin 以保证安全
+      parentWindow.postMessage(replyData, parentOrigin);
+    }
+    
+    log('Iframe 已加载，等待接收消息...');
+  </script>
+</body>
+</html>
