@@ -218,8 +218,9 @@ function MyTodo() {
         5173），因此两者之间存在跨域。
         <br />
         <br />
-        <Text strong type="danger">
-          目前 Node 服务尚未配置 CORS 响应头，点击下方按钮将看到跨域拦截报错！
+        <Text strong style={{ color: "#52c41a" }}>
+          Node 服务已经手动配置了 CORS 响应头
+          (Access-Control-Allow-Origin)，点击下方按钮将成功获取数据！
         </Text>
       </Paragraph>
       <div style={{ marginBottom: "16px" }}>
@@ -229,7 +230,7 @@ function MyTodo() {
           loading={corsLoading}
           style={{ background: "#52c41a", borderColor: "#52c41a" }}
         >
-          发送跨域请求 (预期会报错)
+          发送跨域请求 (预期会成功)
         </Button>
       </div>
       <div
