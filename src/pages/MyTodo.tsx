@@ -21,6 +21,7 @@ function MyTodo() {
   const [corsResult, setCorsResult] = useState("");
   const [nginxLoading, setNginxLoading] = useState(false);
   const [nginxResult, setNginxResult] = useState("");
+  const [domainResult, setDomainResult] = useState("");
 
   // --- postMessage 相关状态 ---
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -196,6 +197,31 @@ function MyTodo() {
     }
   };
 
+  // --- document.domain 跨域示例 ---
+  const handleDomainIframeLoad = () => {
+    try {
+      // 获取 iframe 的 window 对象
+      const iframeWin = (
+        document.getElementById("domainIframe") as HTMLIFrameElement
+      )?.contentWindow;
+      if (iframeWin) {
+        // 尝试访问 iframe 内部的变量
+        // 注意：在本地 localhost 开发环境下，由于不具备完整的一二级域名结构，这里通常会访问成功或因为协议严格限制而报错
+        const dataFromIframe = (iframeWin as any).iframeSecretData;
+        if (dataFromIframe) {
+          setDomainResult(`成功读取子窗口数据：${dataFromIframe}`);
+          message.success("通过 document.domain 读取跨域 iframe 数据成功");
+        }
+      }
+    } catch (error: any) {
+      console.error("document.domain 跨域访问失败:", error);
+      setDomainResult(
+        `读取失败: ${error.message}\n(在本地 localhost 环境下或未正确设置域名时，同源策略会拦截)`,
+      );
+      message.error("读取 iframe 数据被拦截");
+    }
+  };
+
   return (
     <Card style={{ minHeight: "100%", maxWidth: "800px" }}>
       <Title level={4} style={{ marginBottom: 16 }}>
@@ -319,6 +345,74 @@ function MyTodo() {
         ) : (
           <Text style={{ color: "#5c6370" }}>等待请求数据...</Text>
         )}
+      </div>
+
+      <Divider style={{ margin: "40px 0" }} />
+
+      {/* --- document.domain 跨域示例区域 --- */}
+      <Title level={4} style={{ marginBottom: 16 }}>
+        document.domain 跨域示例
+      </Title>
+      <Paragraph type="secondary">
+        该方案仅适用于**主域名相同，子域名不同**的跨域场景（例如{" "}
+        <code>a.test.com</code> 和 <code>b.test.com</code>）。
+        <br />
+        原理：两个页面都通过 JS 强制设置{" "}
+        <code>document.domain = 'test.com'</code>
+        ，浏览器就会认为它们是同源的，从而允许父子页面互相访问 DOM 和全局变量。
+        <br />
+        <Text strong type="warning">
+          注意：此方法已被现代浏览器（如 Chrome
+          115+）弃用并默认禁用，未来会被移除，建议使用 postMessage 代替。本地
+          localhost 环境下无法完全模拟其跨子域效果。
+        </Text>
+      </Paragraph>
+      <div style={{ display: "flex", gap: "20px", marginTop: "16px" }}>
+        <div style={{ flex: 1 }}>
+          <Button
+            type="primary"
+            onClick={() => {
+              try {
+                // 模拟在父页面设置 domain (本地 localhost 可能会报错)
+                document.domain = "localhost";
+                message.success("主页面已设置 document.domain = 'localhost'");
+              } catch (e: any) {
+                message.warning(`设置 domain 失败: ${e.message}`);
+              }
+            }}
+            style={{ marginBottom: 12, marginRight: 8 }}
+          >
+            1. 主页面设置 document.domain
+          </Button>
+          <Button onClick={handleDomainIframeLoad}>
+            2. 尝试读取 iframe 内部变量
+          </Button>
+          <div
+            style={{
+              background: "#fffbe6",
+              border: "1px solid #ffe58f",
+              padding: "12px",
+              borderRadius: "4px",
+              marginTop: "12px",
+              whiteSpace: "pre-wrap",
+              color: "#d46b08",
+            }}
+          >
+            {domainResult || "点击上方按钮尝试读取数据"}
+          </div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <iframe
+            id="domainIframe"
+            src="/domain-iframe.html"
+            style={{
+              width: "100%",
+              height: "150px",
+              border: "1px solid #d9d9d9",
+              borderRadius: "4px",
+            }}
+          />
+        </div>
       </div>
 
       <Divider style={{ margin: "40px 0" }} />

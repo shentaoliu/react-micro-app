@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Domain Iframe</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #fafafa;
+        padding: 10px;
+        margin: 0;
+        font-size: 14px;
+      }
+      .box {
+        border: 1px dashed #d46b08;
+        padding: 10px;
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <h4>我是子 iframe</h4>
+      <p>如果成功跨域，父页面可以读取我 window 上的变量。</p>
+      <button onclick="setDomain()">设置 document.domain</button>
+    </div>
+
+    <script>
+      // 在 iframe 的全局 window 上挂载一个变量供父页面读取
+      window.iframeSecretData = "【这是子域名的机密数据，价值百万！】";
+
+      function setDomain() {
+        try {
+          // 尝试设置 domain (必须和父级设置的保持一致)
+          document.domain = "localhost";
+          alert("子页面设置 domain 成功！");
+        } catch (e) {
+          alert("设置失败，当前环境可能不支持：" + e.message);
+        }
+      }
+    </script>
+  </body>
+</html>
