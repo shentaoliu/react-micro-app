@@ -22,6 +22,7 @@ function MyTodo() {
   const [nginxLoading, setNginxLoading] = useState(false);
   const [nginxResult, setNginxResult] = useState("");
   const [domainResult, setDomainResult] = useState("");
+  const [windowNameResult, setWindowNameResult] = useState("");
 
   // --- postMessage 相关状态 ---
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -222,6 +223,34 @@ function MyTodo() {
     }
   };
 
+  // --- window.name 跨域示例 ---
+  const handleWindowNameLoad = () => {
+    const iframe = document.getElementById(
+      "windowNameIframe",
+    ) as HTMLIFrameElement;
+    if (!iframe) return;
+
+    try {
+      // 尝试读取当前 iframe 的 window.name
+      const nameData = iframe.contentWindow?.name;
+
+      if (nameData && nameData !== "初始的windowName") {
+        setWindowNameResult(`成功读取到跨域数据: ${nameData}`);
+        message.success("成功利用 window.name 读取到数据");
+      } else {
+        setWindowNameResult(
+          "尚未获取到目标数据。请先在 iframe 中点击“设置数据并跳回同源页面”。",
+        );
+      }
+    } catch (error: any) {
+      console.error("读取 window.name 失败:", error);
+      setWindowNameResult(
+        `读取被拦截: ${error.message}\n(因为 iframe 目前处于跨域状态，同源策略禁止读取)`,
+      );
+      message.warning("由于同源策略，当前无法读取 iframe 内容");
+    }
+  };
+
   return (
     <Card style={{ minHeight: "100%", maxWidth: "800px" }}>
       <Title level={4} style={{ marginBottom: 16 }}>
@@ -408,6 +437,70 @@ function MyTodo() {
             style={{
               width: "100%",
               height: "150px",
+              border: "1px solid #d9d9d9",
+              borderRadius: "4px",
+            }}
+          />
+        </div>
+      </div>
+
+      <Divider style={{ margin: "40px 0" }} />
+
+      {/* --- window.name 跨域示例区域 --- */}
+      <Title level={4} style={{ marginBottom: 16 }}>
+        window.name 跨域示例
+      </Title>
+      <Paragraph type="secondary">
+        该方案利用了 <code>window.name</code> 属性的一个奇特特性：
+        <strong>
+          在一个窗口(window)的生命周期内，无论页面怎么跳转，
+          <code>window.name</code> 的值都不会改变，并且可以支持高达 2MB 的数据
+        </strong>
+        。
+        <br />
+        <strong>跨域流程：</strong>
+        <br />
+        1. A 页面包含一个 iframe，最初指向 B 页面 (跨域)。
+        <br />
+        2. B 页面将需要传递的数据赋值给 <code>window.name</code>。
+        <br />
+        3. B 页面利用 <code>location.href</code> 自动跳转回一个和 A
+        页面同源的空页面 C (同源)。
+        <br />
+        4. 由于 A 和 C 现在同源，A 页面就可以直接读取 C 页面 (原 B 窗口) 的{" "}
+        <code>window.name</code> 拿到数据了。
+      </Paragraph>
+
+      <div style={{ display: "flex", gap: "20px", marginTop: "16px" }}>
+        <div style={{ flex: 1 }}>
+          <Button
+            onClick={handleWindowNameLoad}
+            type="primary"
+            style={{ marginBottom: 12 }}
+          >
+            尝试读取 iframe 的 window.name
+          </Button>
+          <div
+            style={{
+              background: "#e6f7ff",
+              border: "1px solid #91d5ff",
+              padding: "12px",
+              borderRadius: "4px",
+              whiteSpace: "pre-wrap",
+              color: "#096dd9",
+            }}
+          >
+            {windowNameResult || "点击按钮尝试读取"}
+          </div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <iframe
+            id="windowNameIframe"
+            name="初始的windowName"
+            src="http://127.0.0.1:5173/windowname-target.html" // 这里故意用 127.0.0.1 模拟与 localhost 的跨域
+            style={{
+              width: "100%",
+              height: "180px",
               border: "1px solid #d9d9d9",
               borderRadius: "4px",
             }}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Window Name Target</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f5ff; padding: 10px; margin: 0; font-size: 14px; color: #333;}
+    .box { border: 1px dashed #1890ff; padding: 10px; background: white; }
+    button { background: #1890ff; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h4>跨域数据提供方 (B 页面)</h4>
+    <p>当前 URL (使用 127.0.0.1 模拟跨域):<br/><span style="font-size:12px;color:#666;" id="urlBox"></span></p>
+    
+    <button onclick="setDataAndJump()">设置数据并跳回同源页面</button>
+  </div>
+
+  <script>
+    document.getElementById('urlBox').textContent = window.location.href;
+
+    function setDataAndJump() {
+      // 1. 将需要跨域传递的数据放入 window.name (只能存字符串)
+      window.name = JSON.stringify({
+        msg: "这是通过 window.name 传递的神奇跨域数据！",
+        time: new Date().toLocaleTimeString()
+      });
+
+      // 2. 跳转到一个与父页面同源的空页面 (C 页面)
+      // 注意：由于父页面是 localhost，所以我们要跳回 localhost
+      // 这里的 /proxy.html 可以是一个完全空白的 html 文件，只要同源即可
+      window.location.href = "http://localhost:5173/proxy.html";
+    }
+  </script>
+</body>
+</html>
