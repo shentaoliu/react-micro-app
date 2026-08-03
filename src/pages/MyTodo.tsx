@@ -9,6 +9,7 @@ import {
   Divider,
   Space,
 } from "antd";
+import { io, Socket } from "socket.io-client";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -24,6 +25,12 @@ function MyTodo() {
   const [domainResult, setDomainResult] = useState("");
   const [windowNameResult, setWindowNameResult] = useState("");
   const [hashResult, setHashResult] = useState("");
+
+  // --- WebSocket 相关状态 ---
+  const [wsConnected, setWsConnected] = useState(false);
+  const [wsMessages, setWsMessages] = useState<string[]>([]);
+  const [wsInput, setWsInput] = useState("你好，WebSocket Server!");
+  const socketRef = useRef<Socket | null>(null);
 
   // --- postMessage 相关状态 ---
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -284,6 +291,67 @@ function MyTodo() {
       iframe.src = `http://127.0.0.1:5173/hash-target.html#data=${encodeURIComponent(data)}`;
     }
   };
+
+  // --- WebSocket 跨域示例 ---
+  const connectWebSocket = () => {
+    if (socketRef.current?.connected) {
+      message.info("WebSocket 已经是连接状态");
+      return;
+    }
+
+    // 连接到后端的 Socket.IO 服务 (跨域端口 3001)
+    const socket = io("http://localhost:3001");
+    socketRef.current = socket;
+
+    socket.on("connect", () => {
+      setWsConnected(true);
+      setWsMessages((prev) => [...prev, "[系统]: 已连接到 WebSocket 服务器"]);
+      message.success("WebSocket 连接成功");
+    });
+
+    socket.on("serverMessage", (data) => {
+      setWsMessages((prev) => [...prev, `[服务端回复]: ${data}`]);
+    });
+
+    socket.on("disconnect", () => {
+      setWsConnected(false);
+      setWsMessages((prev) => [...prev, "[系统]: WebSocket 连接已断开"]);
+    });
+
+    socket.on("connect_error", (err) => {
+      setWsMessages((prev) => [
+        ...prev,
+        `[系统错误]: 连接失败 (${err.message})`,
+      ]);
+      message.error("WebSocket 连接失败，请检查 Node 服务是否启动了 socket.io");
+    });
+  };
+
+  const disconnectWebSocket = () => {
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+      socketRef.current = null;
+    }
+  };
+
+  const sendWsMessage = () => {
+    if (!socketRef.current || !wsConnected) {
+      message.warning("请先连接 WebSocket");
+      return;
+    }
+    socketRef.current.emit("clientMessage", wsInput);
+    setWsMessages((prev) => [...prev, `[我]: ${wsInput}`]);
+    setWsInput("");
+  };
+
+  // 组件卸载时断开连接
+  useEffect(() => {
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
 
   return (
     <Card style={{ minHeight: "100%", maxWidth: "800px" }}>
@@ -600,6 +668,114 @@ function MyTodo() {
               borderRadius: "4px",
             }}
           />
+        </div>
+      </div>
+
+      <Divider style={{ margin: "40px 0" }} />
+
+      {/* --- WebSocket 跨域示例区域 --- */}
+      <Title level={4} style={{ marginBottom: 16 }}>
+        WebSocket 跨域示例
+      </Title>
+      <Paragraph type="secondary">
+        WebSocket 是一种双向通信协议，它在建立连接时通过 HTTP 发起握手（Upgrade
+        请求）。
+        <br />
+        <Text strong style={{ color: "#1890ff" }}>
+          非常重要的一点：WebSocket 协议本身并不受同源策略（Same-Origin
+          Policy）的限制！
+        </Text>
+        因此，前端可以直接连接任意域名的 WebSocket
+        服务。当然，为了安全，服务端通常会校验连接请求的 <code>Origin</code>{" "}
+        头来决定是否接受连接。
+      </Paragraph>
+
+      <div style={{ display: "flex", gap: "20px", marginTop: "16px" }}>
+        <div style={{ flex: 1 }}>
+          <Space style={{ marginBottom: "16px" }}>
+            {wsConnected ? (
+              <Button danger onClick={disconnectWebSocket}>
+                断开 WebSocket 连接
+              </Button>
+            ) : (
+              <Button type="primary" onClick={connectWebSocket}>
+                连接 Node WebSocket 服务
+              </Button>
+            )}
+          </Space>
+
+          <Space.Compact style={{ width: "100%", marginBottom: "16px" }}>
+            <Input
+              value={wsInput}
+              onChange={(e) => setWsInput(e.target.value)}
+              onPressEnter={sendWsMessage}
+              placeholder="输入要发送的消息"
+              disabled={!wsConnected}
+            />
+            <Button
+              type="primary"
+              onClick={sendWsMessage}
+              disabled={!wsConnected}
+            >
+              发送
+            </Button>
+          </Space.Compact>
+
+          <div
+            style={{
+              background: "#282c34",
+              padding: "12px",
+              borderRadius: "4px",
+              height: "200px",
+              overflowY: "auto",
+              fontFamily: "monospace",
+              color: "#abb2bf",
+            }}
+          >
+            {wsMessages.length === 0 ? (
+              <Text style={{ color: "#5c6370" }}>
+                暂无消息，请先建立连接...
+              </Text>
+            ) : (
+              wsMessages.map((msg, idx) => {
+                let color = "#abb2bf"; // 默认灰白
+                if (msg.includes("[系统]")) color = "#e5c07b"; // 黄色
+                if (msg.includes("[系统错误]")) color = "#e06c75"; // 红色
+                if (msg.includes("[我]")) color = "#98c379"; // 绿色
+                if (msg.includes("[服务端回复]")) color = "#61afef"; // 蓝色
+
+                return (
+                  <div key={idx} style={{ marginBottom: "6px", color }}>
+                    {msg}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <div
+            style={{
+              background: "#f5f5f5",
+              padding: "16px",
+              borderRadius: "4px",
+              height: "100%",
+            }}
+          >
+            <Title level={5}>实现原理说明</Title>
+            <p>
+              1. 本示例使用了流行的 <code>socket.io</code> 库。
+            </p>
+            <p>
+              2. 前端 (<code>localhost:5173</code>) 尝试连接后端 (
+              <code>localhost:3001</code>)。
+            </p>
+            <p>3. 浏览器发送 Upgrade 请求时，不会被 CORS 机制拦截。</p>
+            <p>
+              4. 只要后端的 socket.io 配置了允许该跨域
+              Origin，连接就能瞬间建立，实现全双工实时通信。
+            </p>
+          </div>
         </div>
       </div>
 
