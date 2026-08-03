@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hash Target</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #fff1f0;
+        padding: 10px;
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+      }
+      .box {
+        border: 1px dashed #cf1322;
+        padding: 10px;
+        background: white;
+      }
+      button {
+        background: #cf1322;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <h4>Hash 跨域接收方 (跨域 iframe)</h4>
+      <p>
+        父页面传来的数据：<br /><strong id="receivedData" style="color: #cf1322"
+          >等待接收...</strong
+        >
+      </p>
+
+      <button onclick="replyToParent()">通过修改父页面 hash 回复消息</button>
+    </div>
+
+    <script>
+      // 监听自身的 hash 变化（父页面修改的）
+      window.addEventListener("hashchange", function () {
+        const currentHash = window.location.hash;
+        if (currentHash && currentHash.startsWith("#data=")) {
+          const data = decodeURIComponent(currentHash.replace("#data=", ""));
+          document.getElementById("receivedData").textContent = data;
+        }
+      });
+
+      // 子页面回复父页面
+      function replyToParent() {
+        const replyMsg = "Hello Parent, I got it! (from iframe hash)";
+        try {
+          // 直接修改父页面的 hash
+          // 注意：在严格的现代浏览器跨域策略下，跨域 iframe 可能不允许直接修改 parent.location.hash
+          // 传统的做法是再嵌套一个同源的隐藏 iframe 作为跳板，这里为了演示简化了逻辑
+          // 如果直接修改失败，会捕获异常并使用同源跳板 iframe
+          parent.location.hash = "msg=" + encodeURIComponent(replyMsg);
+        } catch (e) {
+          // 如果直接修改报错，使用代理 iframe 方案
+          console.warn("直接修改 parent hash 被拦截，启用代理 iframe 跳转");
+          const proxyIframe = document.createElement("iframe");
+          proxyIframe.style.display = "none";
+          // src 指向与父页面同源的 proxy-hash.html 页面，并将数据放在 hash 中
+          proxyIframe.src =
+            "http://localhost:5173/proxy-hash.html#msg=" +
+            encodeURIComponent(replyMsg);
+          document.body.appendChild(proxyIframe);
+        }
+      }
+    </script>
+  </body>
+</html>

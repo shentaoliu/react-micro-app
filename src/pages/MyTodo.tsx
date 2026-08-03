@@ -23,6 +23,7 @@ function MyTodo() {
   const [nginxResult, setNginxResult] = useState("");
   const [domainResult, setDomainResult] = useState("");
   const [windowNameResult, setWindowNameResult] = useState("");
+  const [hashResult, setHashResult] = useState("");
 
   // --- postMessage 相关状态 ---
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -248,6 +249,39 @@ function MyTodo() {
         `读取被拦截: ${error.message}\n(因为 iframe 目前处于跨域状态，同源策略禁止读取)`,
       );
       message.warning("由于同源策略，当前无法读取 iframe 内容");
+    }
+  };
+
+  // --- location.hash 跨域示例 ---
+  useEffect(() => {
+    // 监听当前页面 (父页面) 的 hash 变化
+    const handleHashChange = () => {
+      const currentHash = window.location.hash;
+      if (currentHash && currentHash.startsWith("#msg=")) {
+        // 解码获取子页面传来的数据
+        const data = decodeURIComponent(currentHash.replace("#msg=", ""));
+        console.log("收到来自 iframe 的 hash 消息:", data);
+        setHashResult(data);
+        message.success("成功通过 location.hash 收到跨域消息！");
+        // 清理 hash 以便下次测试
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname + window.location.search,
+        );
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  const sendHashMessage = () => {
+    const iframe = document.getElementById("hashIframe") as HTMLIFrameElement;
+    if (iframe && iframe.contentWindow) {
+      // 父页面修改跨域 iframe 的 hash 来传递数据
+      const data = "Hello from Parent (via hash)";
+      iframe.src = `http://127.0.0.1:5173/hash-target.html#data=${encodeURIComponent(data)}`;
     }
   };
 
@@ -498,6 +532,67 @@ function MyTodo() {
             id="windowNameIframe"
             name="初始的windowName"
             src="http://127.0.0.1:5173/windowname-target.html" // 这里故意用 127.0.0.1 模拟与 localhost 的跨域
+            style={{
+              width: "100%",
+              height: "180px",
+              border: "1px solid #d9d9d9",
+              borderRadius: "4px",
+            }}
+          />
+        </div>
+      </div>
+
+      <Divider style={{ margin: "40px 0" }} />
+
+      {/* --- location.hash 跨域示例区域 --- */}
+      <Title level={4} style={{ marginBottom: 16 }}>
+        location.hash 跨域示例
+      </Title>
+      <Paragraph type="secondary">
+        这种方案的原理是：虽然不同域的页面不能直接访问彼此的 DOM 或 JS 变量，但
+        <strong>
+          父页面可以随意修改子 iframe 的 <code>src</code> 中的 hash
+          值（#后面的部分），子页面也可以修改父页面的 hash 值
+        </strong>
+        ，而且修改 hash 不会导致页面刷新。
+        <br />
+        因此，页面之间可以通过监听 <code>window.onhashchange</code>{" "}
+        事件来获取彼此传递的数据。
+        <br />
+        <Text strong type="warning">
+          注意：这种方法数据容量有限（受限于 URL 长度），且数据暴露在 URL
+          中不够安全，通常也被现代的 postMessage 所替代。
+        </Text>
+      </Paragraph>
+
+      <div style={{ display: "flex", gap: "20px", marginTop: "16px" }}>
+        <div style={{ flex: 1 }}>
+          <Button
+            onClick={sendHashMessage}
+            type="primary"
+            style={{ marginBottom: 12 }}
+          >
+            通过改变 hash 发送消息给 iframe
+          </Button>
+          <div
+            style={{
+              background: "#fff2f0",
+              border: "1px solid #ffccc7",
+              padding: "12px",
+              borderRadius: "4px",
+              whiteSpace: "pre-wrap",
+              color: "#cf1322",
+            }}
+          >
+            {hashResult
+              ? `收到 iframe 回复: ${hashResult}`
+              : "等待接收 iframe 通过 hash 传回的数据..."}
+          </div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <iframe
+            id="hashIframe"
+            src="http://127.0.0.1:5173/hash-target.html" // 同样用 127.0.0.1 模拟跨域
             style={{
               width: "100%",
               height: "180px",

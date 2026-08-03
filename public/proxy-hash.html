@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Proxy Page for location.hash</title></head>
+<body>
+  <script>
+    // 用于 location.hash 跨域方案的同源跳板逻辑
+    // 当这个页面被跨域的 iframe 加载时，它和最外层的主页面是同源的
+    // 所以它可以越过跨域 iframe 的限制，直接修改最外层主页面的 hash
+    if (window.location.hash) {
+      try {
+        parent.parent.location.hash = window.location.hash;
+      } catch (e) {
+        console.error("代理页面修改主页面 hash 失败", e);
+      }
+    }
+  </script>
+</body>
+</html>
