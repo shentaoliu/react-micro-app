@@ -209,6 +209,8 @@ function MyTodo() {
   // --- document.domain 跨域示例 ---
   const handleDomainIframeLoad = () => {
     try {
+      // 必须先在主页面设置相同的 domain
+      document.domain = "localhost";
       // 获取 iframe 的 window 对象
       const iframeWin = (
         document.getElementById("domainIframe") as HTMLIFrameElement
@@ -221,6 +223,11 @@ function MyTodo() {
           setDomainResult(`成功读取子窗口数据：${dataFromIframe}`);
           message.success("通过 document.domain 读取跨域 iframe 数据成功");
         }
+
+        // 我们也可以主动给子页面传递数据或者调用子页面的方法
+        (iframeWin as any).receiveDataFromParent(
+          "主页面已成功突破跨域限制与你连接！",
+        );
       }
     } catch (error: any) {
       console.error("document.domain 跨域访问失败:", error);
@@ -507,13 +514,16 @@ function MyTodo() {
                 // 模拟在父页面设置 domain (本地 localhost 可能会报错)
                 document.domain = "localhost";
                 message.success("主页面已设置 document.domain = 'localhost'");
+                // 在主页面的 window 上挂载一个变量供子页面读取
+                (window as any).parentSecretData =
+                  "【这是来自父页面的机密数据】";
               } catch (e: any) {
                 message.warning(`设置 domain 失败: ${e.message}`);
               }
             }}
             style={{ marginBottom: 12, marginRight: 8 }}
           >
-            1. 主页面设置 document.domain
+            1. 主页面设置 document.domain 并挂载数据
           </Button>
           <Button onClick={handleDomainIframeLoad}>
             2. 尝试读取 iframe 内部变量
