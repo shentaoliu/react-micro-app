@@ -3,6 +3,7 @@ import App from "../App";
 import WorkspaceOverview from "../pages/WorkspaceOverview";
 import PlaceholderPage from "../pages/PlaceholderPage";
 import MyTodo from "../pages/MyTodo";
+import ShortcutTools from "../pages/ShortcutTools";
 
 export const router = createBrowserRouter([
   {
@@ -27,7 +28,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "tools",
-            element: <PlaceholderPage title="快捷工具" />,
+            element: <ShortcutTools />,
           },
         ],
       },
