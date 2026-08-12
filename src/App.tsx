@@ -54,6 +54,8 @@ const sideMenuMap: Record<string, MenuItem[]> = {
     getItem("总览看板", "overview", <PieChartOutlined />),
     getItem("跨域请求示例", "todo", <AppstoreOutlined />),
     getItem("快捷工具", "tools", <ToolOutlined />),
+    getItem("样式测试", "style-test", <ToolOutlined />),
+    getItem("React测试", "react-test", <AppstoreOutlined />),
   ],
   [TOP_MENU_KEYS.APPS]: [
     getItem("微前端子应用", "apps-micro", <DesktopOutlined />, [

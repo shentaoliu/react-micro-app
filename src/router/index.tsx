@@ -4,6 +4,8 @@ import WorkspaceOverview from "../pages/WorkspaceOverview";
 import PlaceholderPage from "../pages/PlaceholderPage";
 import MyTodo from "../pages/MyTodo";
 import ShortcutTools from "../pages/ShortcutTools";
+import StyleTest from "../pages/StyleTest";
+import ReactTest from "../pages/ReactTest";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +31,14 @@ export const router = createBrowserRouter([
           {
             path: "tools",
             element: <ShortcutTools />,
+          },
+          {
+            path: "style-test",
+            element: <StyleTest />,
+          },
+          {
+            path: "react-test",
+            element: <ReactTest />,
           },
         ],
       },

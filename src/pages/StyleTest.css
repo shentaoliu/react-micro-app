@@ -1,0 +1,24 @@
+/* CSS Hack 测试样式 */
+.hack-box {
+  width: 100%;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 4px;
+
+  /* 
+    CSS Hack 顺序很重要，通常从最宽松到最严格排列，
+    因为后面的同名属性会覆盖前面的属性（如果浏览器能识别的话）。
+  */
+
+  /* 1. 所有浏览器（包括现代浏览器如 Chrome, Firefox, Safari 等）都能识别的基础样式 */
+  background: green;
+}
+
+/* 针对老旧浏览器的 Hack 写法，在某些现代脚手架中直接写非标准属性会报错，所以我们在 React 中展示原理即可。
+   如果您要强制写，可以在普通 HTML 文件的 <style> 标签中测试：
+   *background: red;  (IE6/7)
+   _background: blue; (IE6)
+*/
