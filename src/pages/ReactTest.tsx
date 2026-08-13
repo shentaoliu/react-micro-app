@@ -4,6 +4,7 @@ import React, {
   useLayoutEffect,
   useRef,
   Component,
+  useId,
 } from "react";
 import { Card, Typography, Button, Space, Alert } from "antd";
 
@@ -123,6 +124,89 @@ class ClassChild extends Component<ClassChildProps> {
     );
   }
 }
+
+// --- 新增：用于演示 useId 的子组件 ---
+const IdComponent = () => {
+  // 面试考点：useId 会生成一个唯一的、稳定的 ID 字符串。
+  // 它能保证在 SSR (服务端渲染) 和 CSR (客户端水合) 时生成的 ID 完全一致，避免 Hydration Mismatch。
+  const reactId = useId();
+
+  // 反面教材：使用 Math.random() 生成 ID
+  // 在 SSR 场景下，服务端算出一个随机数生成了 HTML；客户端接管后，又算出一个不同的随机数。
+  // React 比对发现 ID 不一致，会报错并强制重新渲染整个 DOM 树。
+  const randomId = `random-${Math.random().toString(36).substring(2, 7)}`;
+
+  return (
+    <div style={{ display: "flex", gap: "16px", marginBottom: "16px" }}>
+      <div
+        style={{
+          flex: 1,
+          padding: 12,
+          border: "1px solid #d9d9d9",
+          borderRadius: 4,
+        }}
+      >
+        <div>
+          <Text strong>正确做法：useId()</Text>
+        </div>
+        <div style={{ marginTop: 8 }}>
+          <label htmlFor={`${reactId}-email`}>邮箱：</label>
+          <input
+            id={`${reactId}-email`}
+            type="text"
+            placeholder="点击标签可聚焦"
+            style={{ marginLeft: 8 }}
+          />
+        </div>
+        <div
+          style={{
+            marginTop: 8,
+            fontSize: 12,
+            color: "#888",
+            wordBreak: "break-all",
+          }}
+        >
+          生成的 ID: <code>{reactId}</code>
+        </div>
+      </div>
+
+      <div
+        style={{
+          flex: 1,
+          padding: 12,
+          border: "1px dashed #ff4d4f",
+          borderRadius: 4,
+          background: "#fff2f0",
+        }}
+      >
+        <div>
+          <Text type="danger" strong>
+            反面教材：Math.random()
+          </Text>
+        </div>
+        <div style={{ marginTop: 8 }}>
+          <label htmlFor={`${randomId}-email`}>邮箱：</label>
+          <input
+            id={`${randomId}-email`}
+            type="text"
+            placeholder="SSR 时会报错闪烁"
+            style={{ marginLeft: 8 }}
+          />
+        </div>
+        <div
+          style={{
+            marginTop: 8,
+            fontSize: 12,
+            color: "#888",
+            wordBreak: "break-all",
+          }}
+        >
+          生成的 ID: <code>{randomId}</code>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 function ReactTest() {
   // 用于演示 useEffect 的闪烁问题
@@ -444,6 +528,122 @@ function ReactTest() {
               />
             </Card>
           </div>
+        </Card>
+
+        {/* --- useId() 避免 SSR Hydration Mismatch 示例 --- */}
+        <Card title="5. React 18 新特性：useId() 解决 SSR 渲染不一致">
+          <Alert
+            message="为什么需要 useId()？"
+            description={
+              <>
+                <p>
+                  在前端开发中，我们经常需要给表单元素（如{" "}
+                  <code>&lt;input&gt;</code>）生成唯一的 <code>id</code>，以便和{" "}
+                  <code>&lt;label htmlFor="..."&gt;</code>{" "}
+                  绑定，或者为了可访问性（a11y）提供{" "}
+                  <code>aria-describedby</code>。
+                </p>
+                <p>
+                  <strong>痛点（SSR 场景）：</strong> 如果用{" "}
+                  <code>Math.random()</code> 或 <code>uuid()</code> 生成
+                  ID，服务器渲染 HTML 时会生成一个 ID（比如 <code>0.123</code>
+                  ），但浏览器拿到 HTML 后，React
+                  在水合（Hydration）阶段重新执行代码，又会生成一个全新的
+                  ID（比如 <code>0.456</code>）。
+                </p>
+                <p>
+                  <strong>结果：</strong> React 发现两端生成的 DOM 结构不一致（
+                  <strong>Hydration Mismatch</strong>
+                  ），会抛出警告，并废弃服务端生成的整个组件节点，强制在客户端重新渲染，导致严重的性能浪费和页面闪烁。
+                </p>
+                <p>
+                  <strong>useId 的魔法：</strong> <code>useId()</code>{" "}
+                  依赖于组件在 React
+                  树中的层级位置来生成字符串。只要组件树结构没变，服务端和客户端算出来的
+                  ID 就是<strong>绝对一致的</strong>，完美解决了这个问题。
+                </p>
+              </>
+            }
+            type="info"
+            showIcon
+            style={{ marginBottom: 16 }}
+          />
+
+          <Card type="inner" title="表单 ID 绑定演示">
+            <Paragraph style={{ color: "#888", marginBottom: 16 }}>
+              你可以尝试点击下面的文字标签（"邮箱："），只要 ID
+              绑定正确，输入框就会自动获得焦点。
+              在纯客户端渲染（CSR）下，两者表现看起来一样；但在 SSR 框架（如
+              Next.js）中，右侧的反面教材会导致页面崩溃重绘。
+            </Paragraph>
+
+            <IdComponent />
+
+            {/* 演示同一个组件渲染多次，useId 会保证它们互不冲突 */}
+            <IdComponent />
+          </Card>
+
+          <Card
+            type="inner"
+            title="面试进阶追问：多个 React 应用挂在同一页面，ID 冲突怎么办？"
+            style={{ marginTop: 16 }}
+          >
+            <Paragraph>
+              如果你的页面是<strong>微前端架构</strong>，或者在一个老系统里用{" "}
+              <code>createRoot</code> 挂载了多个独立的 React
+              应用，它们可能会生成相同的 <code>:r0:</code>、<code>:r1:</code>
+              ，导致整个页面的 ID 冲突！
+            </Paragraph>
+            <Paragraph strong style={{ color: "#1890ff" }}>
+              解决方案：在挂载应用时，传入 identifierPrefix 配置项，给生成的 ID
+              加前缀。
+            </Paragraph>
+            <div
+              style={{
+                background: "#2b2b2b",
+                color: "#fff",
+                padding: 16,
+                borderRadius: 4,
+                fontFamily: "monospace",
+                fontSize: 13,
+                overflowX: "auto",
+              }}
+            >
+              <span style={{ color: "#c678dd" }}>import</span>{" "}
+              {`{ createRoot }`} <span style={{ color: "#c678dd" }}>from</span>{" "}
+              <span style={{ color: "#98c379" }}>'react-dom/client'</span>;
+              <br />
+              <br />
+              <span style={{ color: "#5c6370" }}>
+                // 应用 A：生成的 ID 会是 :app1-r0:
+              </span>
+              <br />
+              <span style={{ color: "#61afef" }}>createRoot</span>
+              (document.getElementById(
+              <span style={{ color: "#98c379" }}>'root-a'</span>), {`{`}
+              <br />
+              &nbsp;&nbsp;identifierPrefix:{" "}
+              <span style={{ color: "#98c379" }}>'app1-'</span>
+              <br />
+              {`}`}).render(&lt;<span style={{ color: "#e06c75" }}>App1</span>{" "}
+              /&gt;);
+              <br />
+              <br />
+              <span style={{ color: "#5c6370" }}>
+                // 应用 B：生成的 ID 会是 :app2-r0:，完美避免冲突
+              </span>
+              <br />
+              <span style={{ color: "#61afef" }}>createRoot</span>
+              (document.getElementById(
+              <span style={{ color: "#98c379" }}>'root-b'</span>), {`{`}
+              <br />
+              &nbsp;&nbsp;identifierPrefix:{" "}
+              <span style={{ color: "#98c379" }}>'app2-'</span>
+              <br />
+              {`}`}).render(&lt;<span style={{ color: "#e06c75" }}>App2</span>{" "}
+              /&gt;);
+            </div>
+          </Card>
         </Card>
       </Space>
     </div>
