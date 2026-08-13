@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  Component,
+} from "react";
 import { Card, Typography, Button, Space, Alert } from "antd";
 
 const { Title, Paragraph, Text } = Typography;
@@ -75,6 +81,48 @@ const CustomMemoChild = React.memo(
     return prevProps.dsType === nextProps.dsType;
   },
 );
+
+// --- 新增：用于演示 Class 组件 shouldComponentUpdate 的示例 ---
+
+interface ClassChildProps {
+  dsType: string;
+  info: any;
+}
+
+class ClassChild extends Component<ClassChildProps> {
+  // 面试考点：shouldComponentUpdate 的返回值决定了组件是否要重新 render
+  // 返回 true -> 重新渲染 (默认行为)
+  // 返回 false -> 跳过渲染 (性能优化)
+  shouldComponentUpdate(nextProps: ClassChildProps, nextState: any) {
+    // 我们的优化逻辑：只要 dsType 没变，就不重新渲染，忽略 info 对象引用的变化
+    if (this.props.dsType === nextProps.dsType) {
+      return false; // 拦截渲染！
+    }
+    return true; // 允许渲染
+  }
+
+  render() {
+    const renderTime = new Date().toLocaleTimeString();
+    return (
+      <div
+        style={{
+          padding: 8,
+          border: "1px solid #1890ff",
+          borderRadius: 4,
+          marginTop: 8,
+        }}
+      >
+        <div>
+          <Text strong style={{ color: "#1890ff" }}>
+            Class 组件 (shouldComponentUpdate)
+          </Text>
+        </div>
+        <div>渲染时间: {renderTime}</div>
+        <div>dsType: {this.props.dsType}</div>
+      </div>
+    );
+  }
+}
 
 function ReactTest() {
   // 用于演示 useEffect 的闪烁问题
@@ -305,30 +353,35 @@ function ReactTest() {
         </Card>
 
         {/* --- React.memo() 浅比较与自定义比较示例 --- */}
-        <Card title="4. React.memo() 浅层比较与自定义比较">
+        <Card title="4. React 性能优化：React.memo 与 shouldComponentUpdate">
           <Alert
-            message="React.memo 的工作原理"
+            message="React 渲染优化原理"
             description={
               <>
                 <p>
-                  默认情况下，父组件重新渲染会导致所有子组件重新渲染。使用{" "}
-                  <code>React.memo()</code> 可以优化性能，它会对{" "}
-                  <code>props</code> 进行
-                  <strong>浅层比较 (Shallow Compare)</strong>，只有 props
-                  变化时才重新渲染。
+                  默认情况下，父组件重新渲染会导致所有子组件重新渲染。为了优化性能：
                 </p>
+                <ul>
+                  <li>
+                    <strong>函数组件：</strong> 使用{" "}
+                    <code>React.memo(Component, arePropsEqual?)</code>。默认对
+                    props 进行浅比较；可传入第二个参数自定义深层比较。
+                  </li>
+                  <li>
+                    <strong>Class 组件：</strong> 使用{" "}
+                    <code>shouldComponentUpdate(nextProps, nextState)</code>{" "}
+                    生命周期。返回 <code>false</code>{" "}
+                    即可阻止组件渲染。或者直接继承{" "}
+                    <code>React.PureComponent</code> (等同于只做浅比较)。
+                  </li>
+                </ul>
                 <p>
-                  <strong>痛点：</strong> 如果 props
-                  里有对象或函数（例如下面传递的{" "}
+                  <strong>面试痛点演示：</strong> 如果 props
+                  里有对象或函数（如传递{" "}
                   <code>info=&#123;&#123; desc: '测试' &#125;&#125;</code>
-                  ），因为每次父组件渲染都会生成新的对象引用，浅比较会认为 props
-                  变了，导致 <code>React.memo</code> 失效。
-                </p>
-                <p>
-                  <strong>解决方案：</strong> 1. 父组件用{" "}
-                  <code>useMemo/useCallback</code> 缓存引用类型。 2. 给{" "}
-                  <code>React.memo</code>{" "}
-                  传入第二个参数（自定义比较函数），手动控制是否重新渲染。
+                  ），由于每次父组件渲染都会生成新的对象引用，浅比较会认为 props
+                  变了，导致默认的 <code>React.memo</code> 或{" "}
+                  <code>PureComponent</code> 失效。
                 </p>
               </>
             }
@@ -382,6 +435,10 @@ function ReactTest() {
                 info={{ desc: "固定对象，但引用每次不同" }}
               />
               <CustomMemoChild
+                dsType={dsType}
+                info={{ desc: "固定对象，但引用每次不同" }}
+              />
+              <ClassChild
                 dsType={dsType}
                 info={{ desc: "固定对象，但引用每次不同" }}
               />
