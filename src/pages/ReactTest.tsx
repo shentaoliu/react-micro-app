@@ -1,7 +1,80 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { Card, Typography, Button, Space, Alert } from "antd";
 
 const { Title, Paragraph, Text } = Typography;
+
+// --- 新增：用于演示 React.memo 的子组件 ---
+
+// 1. 普通组件（父组件渲染，它一定渲染）
+const NormalChild = ({ dsType, info }: { dsType: string; info: any }) => {
+  const renderTime = new Date().toLocaleTimeString();
+  return (
+    <div
+      style={{
+        padding: 8,
+        border: "1px solid #ff4d4f",
+        borderRadius: 4,
+        marginBottom: 8,
+      }}
+    >
+      <div>
+        <Text type="danger" strong>
+          普通组件
+        </Text>
+      </div>
+      <div>渲染时间: {renderTime} (每次点击都会更新)</div>
+      <div>dsType: {dsType}</div>
+    </div>
+  );
+};
+
+// 2. 默认的 React.memo 组件（浅层比较 props）
+const MemoChild = React.memo(
+  ({ dsType, info }: { dsType: string; info: any }) => {
+    const renderTime = new Date().toLocaleTimeString();
+    return (
+      <div
+        style={{
+          padding: 8,
+          border: "1px solid #faad14",
+          borderRadius: 4,
+          marginBottom: 8,
+        }}
+      >
+        <div>
+          <Text type="warning" strong>
+            React.memo (默认浅比较)
+          </Text>
+        </div>
+        <div>渲染时间: {renderTime}</div>
+        <div>dsType: {dsType}</div>
+      </div>
+    );
+  },
+);
+
+// 3. 自定义比较函数的 React.memo 组件
+const CustomMemoChild = React.memo(
+  ({ dsType, info }: { dsType: string; info: any }) => {
+    const renderTime = new Date().toLocaleTimeString();
+    return (
+      <div style={{ padding: 8, border: "1px solid #52c41a", borderRadius: 4 }}>
+        <div>
+          <Text type="success" strong>
+            React.memo (自定义深比较)
+          </Text>
+        </div>
+        <div>渲染时间: {renderTime}</div>
+        <div>dsType: {dsType}</div>
+      </div>
+    );
+  },
+  // 第二个参数：自定义比对函数
+  // 如果返回 true，表示 props 没变，不重新渲染；返回 false，表示变了，重新渲染。
+  (prevProps, nextProps) => {
+    return prevProps.dsType === nextProps.dsType;
+  },
+);
 
 function ReactTest() {
   // 用于演示 useEffect 的闪烁问题
@@ -45,6 +118,10 @@ function ReactTest() {
       ]);
     };
   }, []); // 空依赖数组，理论上只在组件挂载时执行一次
+
+  // --- 新增：用于演示 React.memo 的状态 ---
+  const [parentCount, setParentCount] = useState(0);
+  const [dsType, setDsType] = useState("type_A");
 
   return (
     <div style={{ padding: "24px" }}>
@@ -225,6 +302,91 @@ function ReactTest() {
               如果你只看到一行 (Mount)，说明 StrictMode 未开启。
             </Paragraph>
           </Card>
+        </Card>
+
+        {/* --- React.memo() 浅比较与自定义比较示例 --- */}
+        <Card title="4. React.memo() 浅层比较与自定义比较">
+          <Alert
+            message="React.memo 的工作原理"
+            description={
+              <>
+                <p>
+                  默认情况下，父组件重新渲染会导致所有子组件重新渲染。使用{" "}
+                  <code>React.memo()</code> 可以优化性能，它会对{" "}
+                  <code>props</code> 进行
+                  <strong>浅层比较 (Shallow Compare)</strong>，只有 props
+                  变化时才重新渲染。
+                </p>
+                <p>
+                  <strong>痛点：</strong> 如果 props
+                  里有对象或函数（例如下面传递的{" "}
+                  <code>info=&#123;&#123; desc: '测试' &#125;&#125;</code>
+                  ），因为每次父组件渲染都会生成新的对象引用，浅比较会认为 props
+                  变了，导致 <code>React.memo</code> 失效。
+                </p>
+                <p>
+                  <strong>解决方案：</strong> 1. 父组件用{" "}
+                  <code>useMemo/useCallback</code> 缓存引用类型。 2. 给{" "}
+                  <code>React.memo</code>{" "}
+                  传入第二个参数（自定义比较函数），手动控制是否重新渲染。
+                </p>
+              </>
+            }
+            type="success"
+            showIcon
+            style={{ marginBottom: 16 }}
+          />
+
+          <div style={{ display: "flex", gap: "24px" }}>
+            <Card type="inner" title="父组件操作区" style={{ flex: 1 }}>
+              <Paragraph>
+                父组件计数器: <strong>{parentCount}</strong>
+                <br />
+                传递给子组件的 dsType: <strong>{dsType}</strong>
+                <br />
+                传递给子组件的 info:{" "}
+                <code>{`{ desc: '固定对象，但引用每次不同' }`}</code>
+              </Paragraph>
+              <Space direction="vertical" style={{ width: "100%" }}>
+                <Button
+                  type="primary"
+                  onClick={() => setParentCount((c) => c + 1)}
+                  block
+                >
+                  1. 修改父组件计数器 (触发父组件重渲染)
+                </Button>
+                <Button
+                  onClick={() =>
+                    setDsType((prev) =>
+                      prev === "type_A" ? "type_B" : "type_A",
+                    )
+                  }
+                  block
+                >
+                  2. 切换 dsType 属性
+                </Button>
+              </Space>
+            </Card>
+
+            <Card
+              type="inner"
+              title="子组件渲染表现 (观察渲染时间变化)"
+              style={{ flex: 1, background: "#fafafa" }}
+            >
+              <NormalChild
+                dsType={dsType}
+                info={{ desc: "固定对象，但引用每次不同" }}
+              />
+              <MemoChild
+                dsType={dsType}
+                info={{ desc: "固定对象，但引用每次不同" }}
+              />
+              <CustomMemoChild
+                dsType={dsType}
+                info={{ desc: "固定对象，但引用每次不同" }}
+              />
+            </Card>
+          </div>
         </Card>
       </Space>
     </div>
