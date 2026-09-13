@@ -10,6 +10,8 @@ import {
   ToolOutlined,
   TeamOutlined,
   SafetyOutlined,
+  HomeOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import reactLogo from "./assets/react.svg";
@@ -51,11 +53,13 @@ function getItem(
 // key 对应路由中的最后一段 path
 const sideMenuMap: Record<string, MenuItem[]> = {
   [TOP_MENU_KEYS.WORKSPACE]: [
+    getItem("首页", "home", <HomeOutlined />),
     getItem("总览看板", "overview", <PieChartOutlined />),
     getItem("跨域请求示例", "todo", <AppstoreOutlined />),
     getItem("快捷工具", "tools", <ToolOutlined />),
     getItem("样式测试", "style-test", <ToolOutlined />),
     getItem("React测试", "react-test", <AppstoreOutlined />),
+    getItem("React19表单测试", "react-19-form", <FormOutlined />),
   ],
   [TOP_MENU_KEYS.APPS]: [
     getItem("微前端子应用", "apps-micro", <DesktopOutlined />, [
@@ -86,7 +90,7 @@ const App: React.FC = () => {
   // 从当前路由 URL 中解析出选中的顶级菜单和侧边栏菜单
   const pathSnippets = location.pathname.split("/").filter((i) => i);
   const activeTopMenu = pathSnippets[0] || TOP_MENU_KEYS.WORKSPACE;
-  const activeSideMenu = pathSnippets[pathSnippets.length - 1] || "overview";
+  const activeSideMenu = pathSnippets[pathSnippets.length - 1] || "home";
 
   // 根据当前一级导航选中状态，动态计算左侧菜单
   const currentSideMenuItems = useMemo(() => {

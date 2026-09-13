@@ -6,6 +6,8 @@ import MyTodo from "../pages/MyTodo";
 import ShortcutTools from "../pages/ShortcutTools";
 import StyleTest from "../pages/StyleTest";
 import ReactTest from "../pages/ReactTest";
+import React19FormTest from "../pages/React19FormTest";
+import Home from "../pages/Home";
 
 export const router = createBrowserRouter([
   {
@@ -14,12 +16,16 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/workspace/overview" replace />,
+        element: <Navigate to="/workspace/home" replace />,
       },
       // 工作台模块
       {
         path: "workspace",
         children: [
+          {
+            path: "home",
+            element: <Home />,
+          },
           {
             path: "overview",
             element: <WorkspaceOverview />,
@@ -39,6 +45,10 @@ export const router = createBrowserRouter([
           {
             path: "react-test",
             element: <ReactTest />,
+          },
+          {
+            path: "react-19-form",
+            element: <React19FormTest />,
           },
         ],
       },
