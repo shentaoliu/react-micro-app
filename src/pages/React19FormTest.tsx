@@ -9,6 +9,7 @@ import UseApiTest from "../components/React19Forms/UseApiTest";
 import RefTestComponent from "../components/React19Forms/RefTestComponent";
 import ContextProviderTest from "../components/React19Forms/ContextProviderTest";
 import DocumentHeadTest from "../components/React19Forms/DocumentHeadTest";
+import ResourcePreloadTest from "../components/React19Forms/ResourcePreloadTest";
 
 const { Title, Paragraph } = Typography;
 
@@ -66,6 +67,7 @@ const React19FormTest: React.FC = () => {
       <RefTestComponent />
       <ContextProviderTest />
       <DocumentHeadTest />
+      <ResourcePreloadTest />
     </div>
   );
 };
