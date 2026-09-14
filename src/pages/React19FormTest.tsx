@@ -4,6 +4,7 @@ import LegacyForm from "../components/React19Forms/LegacyForm";
 import BasicActionForm from "../components/React19Forms/BasicActionForm";
 import ActionStateForm from "../components/React19Forms/ActionStateForm";
 import FormStatusForm from "../components/React19Forms/FormStatusForm";
+import OptimisticForm from "../components/React19Forms/OptimisticForm";
 
 const { Title, Paragraph } = Typography;
 
@@ -56,6 +57,7 @@ const React19FormTest: React.FC = () => {
       <BasicActionForm />
       <ActionStateForm />
       <FormStatusForm />
+      <OptimisticForm />
     </div>
   );
 };
