@@ -1,7 +1,9 @@
 import React from "react";
 import { Card, Typography, Alert } from "antd";
+import LegacyForm from "../components/React19Forms/LegacyForm";
 import BasicActionForm from "../components/React19Forms/BasicActionForm";
 import ActionStateForm from "../components/React19Forms/ActionStateForm";
+import FormStatusForm from "../components/React19Forms/FormStatusForm";
 
 const { Title, Paragraph } = Typography;
 
@@ -27,22 +29,21 @@ const React19FormTest: React.FC = () => {
         useActionState, useFormStatus, useOptimistic 等）。
       </Paragraph>
 
-      <Card title="1. React 19 Actions 简介" style={{ marginBottom: "24px" }}>
+      <Card title="React 19 Actions 简介" style={{ marginBottom: "24px" }}>
         <Alert
-          message="什么是 Actions？"
+          message="为什么要引入 Actions？"
           description={
             <>
               <p>
-                在 React 19 之前，处理表单提交通常需要手动管理{" "}
-                <code>pending</code> 状态、阻止默认事件{" "}
-                <code>e.preventDefault()</code>，然后调用异步请求。
+                在往下看之前，先看看 <strong>示例1</strong>{" "}
+                的传统写法。你需要写一堆样板代码：阻止默认事件、受控组件绑定、手动管理
+                Loading 和 Error。
               </p>
               <p>
-                React 19 引入了 <strong>Actions</strong>
-                。你可以直接将一个异步函数传递给{" "}
-                <code>&lt;form action=&#123;myAction&#125;&gt;</code>。React
-                会自动管理表单的提交生命周期，包括挂起状态（pending
-                state）、错误处理和乐观更新（optimistic updates）。
+                React 19 引入了 <strong>Actions</strong>（示例2 和
+                示例3）。你可以直接将一个异步函数传递给{" "}
+                <code>&lt;form action=&#123;myAction&#125;&gt;</code>。配合新的
+                Hooks，React 会自动接管表单的生命周期，大大简化了代码！
               </p>
             </>
           }
@@ -51,8 +52,10 @@ const React19FormTest: React.FC = () => {
         />
       </Card>
 
+      <LegacyForm />
       <BasicActionForm />
       <ActionStateForm />
+      <FormStatusForm />
     </div>
   );
 };
