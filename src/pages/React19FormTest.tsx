@@ -8,6 +8,7 @@ import OptimisticForm from "../components/React19Forms/OptimisticForm";
 import UseApiTest from "../components/React19Forms/UseApiTest";
 import RefTestComponent from "../components/React19Forms/RefTestComponent";
 import ContextProviderTest from "../components/React19Forms/ContextProviderTest";
+import DocumentHeadTest from "../components/React19Forms/DocumentHeadTest";
 
 const { Title, Paragraph } = Typography;
 
@@ -64,6 +65,7 @@ const React19FormTest: React.FC = () => {
       <UseApiTest />
       <RefTestComponent />
       <ContextProviderTest />
+      <DocumentHeadTest />
     </div>
   );
 };
