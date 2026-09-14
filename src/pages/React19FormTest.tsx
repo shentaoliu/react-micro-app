@@ -5,6 +5,7 @@ import BasicActionForm from "../components/React19Forms/BasicActionForm";
 import ActionStateForm from "../components/React19Forms/ActionStateForm";
 import FormStatusForm from "../components/React19Forms/FormStatusForm";
 import OptimisticForm from "../components/React19Forms/OptimisticForm";
+import UseApiTest from "../components/React19Forms/UseApiTest";
 
 const { Title, Paragraph } = Typography;
 
@@ -58,6 +59,7 @@ const React19FormTest: React.FC = () => {
       <ActionStateForm />
       <FormStatusForm />
       <OptimisticForm />
+      <UseApiTest />
     </div>
   );
 };
