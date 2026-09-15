@@ -8,6 +8,9 @@ import StyleTest from "../pages/StyleTest";
 import ReactTest from "../pages/ReactTest";
 import React19FormTest from "../pages/React19FormTest";
 import Home from "../pages/Home";
+import CustomHooksTest from "../pages/CustomHooksTest";
+import ReactReviewList from "../pages/ReactReviewList";
+import ReactReviewDetail from "../pages/ReactReviewDetail";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +52,18 @@ export const router = createBrowserRouter([
           {
             path: "react-19-form",
             element: <React19FormTest />,
+          },
+          {
+            path: "custom-hooks",
+            element: <CustomHooksTest />,
+          },
+          {
+            path: "react-review",
+            element: <ReactReviewList />,
+          },
+          {
+            path: "react-review/:topicId",
+            element: <ReactReviewDetail />,
           },
         ],
       },

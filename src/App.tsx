@@ -12,6 +12,8 @@ import {
   SafetyOutlined,
   HomeOutlined,
   FormOutlined,
+  ApiOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import reactLogo from "./assets/react.svg";
@@ -60,6 +62,8 @@ const sideMenuMap: Record<string, MenuItem[]> = {
     getItem("样式测试", "style-test", <ToolOutlined />),
     getItem("React测试", "react-test", <AppstoreOutlined />),
     getItem("React19表单测试", "react-19-form", <FormOutlined />),
+    getItem("自定义Hook", "custom-hooks", <ApiOutlined />),
+    getItem("React复习示例", "react-review", <BookOutlined />),
   ],
   [TOP_MENU_KEYS.APPS]: [
     getItem("微前端子应用", "apps-micro", <DesktopOutlined />, [

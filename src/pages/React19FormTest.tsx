@@ -10,6 +10,7 @@ import RefTestComponent from "../components/React19Forms/RefTestComponent";
 import ContextProviderTest from "../components/React19Forms/ContextProviderTest";
 import DocumentHeadTest from "../components/React19Forms/DocumentHeadTest";
 import ResourcePreloadTest from "../components/React19Forms/ResourcePreloadTest";
+import EffectEventTest from "../components/React19Forms/EffectEventTest";
 
 const { Title, Paragraph } = Typography;
 
@@ -68,6 +69,7 @@ const React19FormTest: React.FC = () => {
       <ContextProviderTest />
       <DocumentHeadTest />
       <ResourcePreloadTest />
+      <EffectEventTest />
     </div>
   );
 };
