@@ -11,6 +11,8 @@ import Home from "../pages/Home";
 import CustomHooksTest from "../pages/CustomHooksTest";
 import ReactReviewList from "../pages/ReactReviewList";
 import ReactReviewDetail from "../pages/ReactReviewDetail";
+import BigDataReviewList from "../pages/BigDataReviewList";
+import BigDataReviewDetail from "../pages/BigDataReviewDetail";
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +66,14 @@ export const router = createBrowserRouter([
           {
             path: "react-review/:topicId",
             element: <ReactReviewDetail />,
+          },
+          {
+            path: "big-data",
+            element: <BigDataReviewList />,
+          },
+          {
+            path: "big-data/:topicId",
+            element: <BigDataReviewDetail />,
           },
         ],
       },
