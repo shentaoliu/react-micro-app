@@ -1,8 +1,8 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import type { UIEvent } from "react";
-import { Card, Typography, Divider, Alert, Space, Button } from "antd";
+import { Card, Typography, Divider, Alert, Space } from "antd";
 
-const { Title, Paragraph, Text } = Typography;
+const { Paragraph, Text } = Typography;
 
 // 模拟海量数据
 const TOTAL_COUNT = 100000;
@@ -19,7 +19,6 @@ const VirtualListDemo: React.FC = () => {
   }, []);
 
   const [scrollTop, setScrollTop] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   // 1. 计算列表总高度 (用于撑开滚动条)
   const totalHeight = listData.length * ITEM_HEIGHT;
@@ -46,10 +45,8 @@ const VirtualListDemo: React.FC = () => {
 
   // 监听滚动事件
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
-    // 使用 requestAnimationFrame 节流，保证滚动丝滑
-    window.requestAnimationFrame(() => {
-      setScrollTop(e.currentTarget.scrollTop);
-    });
+    // currentTarget 仅在事件处理期间有效，必须同步读取。
+    setScrollTop(e.currentTarget.scrollTop);
   };
 
   return (
@@ -99,7 +96,6 @@ const VirtualListDemo: React.FC = () => {
 
       {/* 外层容器：固定高度，设置滚动条 */}
       <div
-        ref={containerRef}
         onScroll={handleScroll}
         style={{
           height: `${CONTAINER_HEIGHT}px`,
@@ -110,10 +106,11 @@ const VirtualListDemo: React.FC = () => {
         }}
       >
         {/* 占位元素：用来撑开滚动条总高度 */}
-        <div style={{ height: `${totalHeight}px` }} />
+        <div className="aaa" style={{ height: `${totalHeight}px` }} />
 
         {/* 实际渲染列表区域：绝对定位，根据 scrollTop 动态计算偏移量 */}
         <div
+          className="bbb"
           style={{
             position: "absolute",
             top: 0,

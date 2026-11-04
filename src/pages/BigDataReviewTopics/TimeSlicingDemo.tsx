@@ -24,7 +24,7 @@ const TimeSlicingDemo: React.FC = () => {
       if (curTotal <= 0) return;
 
       // 计算本帧需要渲染的数量
-      let pageCount = Math.min(curTotal, once);
+      let pageCount = Math.min(curTotal, once); // 返回两个数字中较小的那个‌，在分批渲染大量数据的场景中，用它来避免最后一页超出剩余数据量。
       console.log(`当前帧渲染 ${pageCount} 条`);
 
       // 面试核心：使用 requestAnimationFrame 代替 setTimeout
