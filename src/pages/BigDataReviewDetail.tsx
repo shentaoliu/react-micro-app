@@ -1,9 +1,11 @@
 import React from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Button, Typography } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import TimeSlicingDemo from "./BigDataReviewTopics/TimeSlicingDemo";
 import VirtualListDemo from "./BigDataReviewTopics/VirtualListDemo";
+
+import VariableHeightVirtualListDemo from "./BigDataReviewTopics/VariableHeightVirtualListDemo";
 
 const { Title, Paragraph } = Typography;
 
@@ -14,10 +16,12 @@ const BigDataReviewDetail: React.FC = () => {
   // 根据 topicId 匹配对应的组件
   const renderTopicComponent = () => {
     switch (topicId) {
-      case 'time-slicing':
+      case "time-slicing":
         return <TimeSlicingDemo />;
-      case 'virtual-list':
+      case "virtual-list":
         return <VirtualListDemo />;
+      case "variable-height-virtual-list":
+        return <VariableHeightVirtualListDemo />;
       default:
         // 暂时返回一个占位符，等我们实现了具体的组件后再替换
         return (
