@@ -23,6 +23,11 @@ const bigDataTopics = [
     title: "不定高虚拟列表",
     description: "动态测量行高，通过前缀和与二分查找渲染可视区域。",
   },
+  {
+    id: "worker-processing",
+    title: "Worker + 分块处理",
+    description: "在后台线程处理 10 万条订单，支持进度展示、取消任务，保持页面交互流畅。",
+  },
 ];
 
 const BigDataReviewList: React.FC = () => {

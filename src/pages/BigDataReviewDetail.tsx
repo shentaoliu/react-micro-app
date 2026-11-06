@@ -7,6 +7,8 @@ import VirtualListDemo from "./BigDataReviewTopics/VirtualListDemo";
 
 import VariableHeightVirtualListDemo from "./BigDataReviewTopics/VariableHeightVirtualListDemo";
 
+import WorkerProcessingDemo from "./BigDataReviewTopics/WorkerProcessingDemo";
+
 const { Title, Paragraph } = Typography;
 
 const BigDataReviewDetail: React.FC = () => {
@@ -16,6 +18,8 @@ const BigDataReviewDetail: React.FC = () => {
   // 根据 topicId 匹配对应的组件
   const renderTopicComponent = () => {
     switch (topicId) {
+      case "worker-processing":
+        return <WorkerProcessingDemo />;
       case "time-slicing":
         return <TimeSlicingDemo />;
       case "virtual-list":
