@@ -1,7 +1,7 @@
 import React, { createElement, useState } from "react";
 import { Card, Typography, Divider, Button, Space } from "antd";
 
-const { Title, Paragraph, Text } = Typography;
+const { Paragraph, Text } = Typography;
 
 const JsxReview: React.FC = () => {
   const [count, setCount] = useState(0);
@@ -14,12 +14,12 @@ const JsxReview: React.FC = () => {
       className="jsx-container"
       style={{
         padding: "16px",
-        background: "#f6ffed",
-        border: "1px solid #b7eb8f",
+        background: "var(--success-bg)",
+        border: "1px solid var(--success-border)",
         borderRadius: "8px",
       }}
     >
-      <h3 style={{ color: "#52c41a" }}>这是用 JSX 写的</h3>
+      <h3 style={{ color: "var(--success)" }}>这是用 JSX 写的</h3>
       <p>计数器的值: {count}</p>
       <Button type="primary" onClick={() => setCount((c) => c + 1)}>
         点击 +1
@@ -37,14 +37,14 @@ const JsxReview: React.FC = () => {
       className: "jsx-container",
       style: {
         padding: "16px",
-        background: "#fff0f6",
-        border: "1px solid #ffadd2",
+        background: "var(--info-bg)",
+        border: "1px solid var(--info-border)",
         borderRadius: "8px",
       },
     },
     createElement(
       "h3",
-      { style: { color: "#eb2f96" } },
+      { style: { color: "var(--accent)" } },
       "这是用 createElement 写的",
     ),
     createElement("p", null, `计数器的值: ${count}`),
@@ -110,8 +110,8 @@ const JsxReview: React.FC = () => {
         </Paragraph>
         <pre
           style={{
-            background: "#282c34",
-            color: "#abb2bf",
+            background: "var(--bg)",
+            color: "var(--muted)",
             padding: "16px",
             borderRadius: "8px",
             overflowX: "auto",

@@ -39,14 +39,14 @@ const SimpleBarChart = ({ data }: { data: number[] }) => {
             height: "100%",
           }}
         >
-          <span style={{ fontSize: 12, color: "#888", marginBottom: 4 }}>
+          <span style={{ fontSize: 12, color: "var(--muted)", marginBottom: 4 }}>
             {val}
           </span>
           <div
             style={{
               width: "100%",
               height: `${(val / max) * 100}%`,
-              background: "linear-gradient(180deg, #1890ff 0%, #bae0ff 100%)",
+              background: "linear-gradient(180deg, var(--accent) 0%, var(--accent-bg) 100%)",
               borderRadius: "4px 4px 0 0",
               transition: "height 0.5s ease-out",
             }}
@@ -213,7 +213,7 @@ function Home() {
               title="今日活跃用户 (服务端直出 -> 客户端更新)"
               value={displayData.users}
               precision={0}
-              valueStyle={{ color: "#3f8600" }}
+              valueStyle={{ color: "var(--success)" }}
               prefix={<ArrowUpOutlined />}
               suffix="人"
             />
@@ -237,7 +237,7 @@ function Home() {
               title="本月销售额"
               value={displayData.sales}
               precision={2}
-              valueStyle={{ color: "#cf1322" }}
+              valueStyle={{ color: "var(--error)" }}
               prefix={<ArrowDownOutlined />}
               suffix="¥"
             />

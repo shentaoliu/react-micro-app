@@ -11,12 +11,12 @@ const PlaceholderPage: React.FC<{ title: string }> = ({ title }) => (
       justifyContent: "center",
       alignItems: "center",
       minHeight: "400px",
-      background: "#fafafa",
+      background: "var(--surface)",
       borderRadius: "8px",
-      border: "1px dashed #d9d9d9",
+      border: "1px dashed var(--border)",
     }}
   >
-    <Title level={3} style={{ color: "#999", margin: 0 }}>
+    <Title level={3} style={{ color: "var(--muted)", margin: 0 }}>
       {title} 页面内容建设中...
     </Title>
   </div>

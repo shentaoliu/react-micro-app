@@ -1,11 +1,11 @@
 import React from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
-import { Button, Typography } from "antd";
+import { Button } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import JsxReview from "./ReactReviewTopics/JsxReview";
 import SuspenseLazyReview from "./ReactReviewTopics/SuspenseLazyReview";
 
-const { Title } = Typography;
+
 
 const ReactReviewDetail: React.FC = () => {
   const { topicId } = useParams();
@@ -37,7 +37,7 @@ const ReactReviewDetail: React.FC = () => {
 
       {/* 渲染具体的专题组件 */}
       <div
-        style={{ background: "#fff", borderRadius: "8px", minHeight: "400px" }}
+        style={{ background: "var(--bg)", borderRadius: "8px", minHeight: "400px" }}
       >
         {renderTopicComponent()}
       </div>

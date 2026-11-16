@@ -14,6 +14,8 @@ import ReactReviewDetail from "../pages/ReactReviewDetail";
 import BigDataReviewList from "../pages/BigDataReviewList";
 import BigDataReviewDetail from "../pages/BigDataReviewDetail";
 
+import ReactiveRendering from "../pages/ReactiveRendering";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -66,6 +68,10 @@ export const router = createBrowserRouter([
           {
             path: "react-review/:topicId",
             element: <ReactReviewDetail />,
+          },
+          {
+            path: "reactive-rendering",
+            element: <ReactiveRendering />,
           },
           {
             path: "big-data",

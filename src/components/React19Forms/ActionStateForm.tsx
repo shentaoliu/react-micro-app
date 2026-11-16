@@ -6,7 +6,7 @@ const { Paragraph } = Typography;
 
 // 1. 定义 Action 函数
 // 注意：使用 useActionState 时，Action 函数的第一个参数是前一次的状态 (prevState)，第二个参数才是 FormData
-const submitAction = async (prevState: any, formData: FormData) => {
+const submitAction = async (_prevState: any, formData: FormData) => {
   try {
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;

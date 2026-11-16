@@ -50,7 +50,7 @@ const BigDataReviewDetail: React.FC = () => {
 
       {/* 渲染具体的专题组件 */}
       <div
-        style={{ background: "#fff", borderRadius: "8px", minHeight: "400px" }}
+        style={{ background: "var(--bg)", borderRadius: "8px", minHeight: "400px" }}
       >
         {renderTopicComponent()}
       </div>

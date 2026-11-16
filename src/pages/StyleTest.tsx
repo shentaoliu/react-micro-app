@@ -36,7 +36,7 @@ function StyleTest() {
           style={{ marginBottom: 16 }}
         />
 
-        <div style={{ marginTop: 24, border: "1px dashed #ccc", padding: 16 }}>
+        <div style={{ marginTop: 24, border: "1px dashed var(--border)", padding: 16 }}>
           <Title level={4}>1. 属性级 Hack (以背景色为例)</Title>
           <Paragraph>
             下面这个方块在现代浏览器（如 Chrome, Firefox）中背景是

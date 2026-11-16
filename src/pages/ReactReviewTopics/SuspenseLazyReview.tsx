@@ -39,7 +39,7 @@ const SuspenseLazyReview: React.FC = () => {
         style={{ 
           marginTop: '16px', 
           minHeight: '120px', 
-          border: '1px dashed #d9d9d9', 
+          border: '1px dashed var(--border)', 
           padding: '16px', 
           borderRadius: '8px',
           display: 'flex',
@@ -53,7 +53,7 @@ const SuspenseLazyReview: React.FC = () => {
             <LazyComponent />
           </Suspense>
         ) : (
-          <div style={{ color: '#999' }}>
+          <div style={{ color: 'var(--muted)' }}>
             组件暂未挂载，浏览器当前没有下载它的 JS 文件。
           </div>
         )}

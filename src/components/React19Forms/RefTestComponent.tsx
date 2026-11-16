@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef, useEffect } from "react";
+import React, { useRef, forwardRef } from "react";
 import { Card, Typography, Button, Input, Space, Divider } from "antd";
 
 const { Title, Paragraph, Text } = Typography;
@@ -61,7 +61,7 @@ const RefTestComponent: React.FC = () => {
   return (
     <Card
       title="7. 再见，forwardRef！(ref 作为普通 Prop)"
-      style={{ marginBottom: "24px", borderColor: "#52c41a" }}
+      style={{ marginBottom: "24px", borderColor: "var(--success)" }}
     >
       <Paragraph>
         <strong>面试考点：</strong> 在 React 19 之前，为什么函数组件不能直接接收{" "}
@@ -85,7 +85,7 @@ const RefTestComponent: React.FC = () => {
         <div
           style={{
             padding: "16px",
-            background: "#f5f5f5",
+            background: "var(--surface)",
             borderRadius: "8px",
           }}
         >
@@ -100,9 +100,9 @@ const RefTestComponent: React.FC = () => {
         <div
           style={{
             padding: "16px",
-            background: "#f6ffed",
+            background: "var(--success-bg)",
             borderRadius: "8px",
-            border: "1px solid #b7eb8f",
+            border: "1px solid var(--success-border)",
           }}
         >
           <Title level={5}>2. React 19 现代写法 (直接解构 ref)</Title>

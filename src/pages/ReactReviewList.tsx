@@ -63,7 +63,7 @@ const ReactReviewList: React.FC = () => {
               <Card.Meta
                 avatar={
                   <ReadOutlined
-                    style={{ fontSize: "24px", color: "#1677ff" }}
+                    style={{ fontSize: "24px", color: "var(--accent)" }}
                   />
                 }
                 title={topic.title}
@@ -71,7 +71,7 @@ const ReactReviewList: React.FC = () => {
                   <div
                     style={{
                       marginTop: "8px",
-                      color: "#666",
+                      color: "var(--muted)",
                       fontSize: "13px",
                       flex: 1,
                     }}

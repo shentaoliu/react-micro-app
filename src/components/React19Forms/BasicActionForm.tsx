@@ -41,7 +41,7 @@ const BasicActionForm: React.FC = () => {
 
       {/* 注意：在 React 19 中，form 的 action 属性可以直接接收一个异步函数 */}
       <form
-        onSubmit={(e) => {
+        onSubmit={(_e) => {
           // 因为在这个基础示例中我们自己管理 loading 状态
           // 在提交时为了防止重复点击，我们需要拦截一下，或者交由按钮的 loading 状态处理
           // React 19 的 action 会在 submit 事件之后执行

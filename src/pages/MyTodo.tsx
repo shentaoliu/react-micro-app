@@ -411,7 +411,7 @@ function MyTodo() {
         5173），因此两者之间存在跨域。
         <br />
         <br />
-        <Text strong style={{ color: "#52c41a" }}>
+        <Text strong style={{ color: "var(--success)" }}>
           Node 服务已经手动配置了 CORS 响应头
           (Access-Control-Allow-Origin)，点击下方按钮将成功获取数据！
         </Text>
@@ -421,15 +421,15 @@ function MyTodo() {
           type="primary"
           onClick={handleCorsRequest}
           loading={corsLoading}
-          style={{ background: "#52c41a", borderColor: "#52c41a" }}
+          style={{ background: "var(--success)", borderColor: "var(--success)" }}
         >
           发送跨域请求 (预期会成功)
         </Button>
       </div>
       <div
         style={{
-          background: "#282c34",
-          color: "#abb2bf",
+          background: "var(--bg)",
+          color: "var(--muted)",
           padding: "12px",
           borderRadius: "4px",
           minHeight: "80px",
@@ -439,7 +439,7 @@ function MyTodo() {
         {corsResult ? (
           <pre style={{ margin: 0 }}>{corsResult}</pre>
         ) : (
-          <Text style={{ color: "#5c6370" }}>等待请求数据...</Text>
+          <Text style={{ color: "var(--muted)" }}>等待请求数据...</Text>
         )}
       </div>
 
@@ -463,15 +463,15 @@ function MyTodo() {
           type="primary"
           onClick={handleNginxRequest}
           loading={nginxLoading}
-          style={{ background: "#722ed1", borderColor: "#722ed1" }}
+          style={{ background: "var(--accent)", borderColor: "var(--accent)" }}
         >
           发送代理请求 (请求 /api/data)
         </Button>
       </div>
       <div
         style={{
-          background: "#282c34",
-          color: "#abb2bf",
+          background: "var(--bg)",
+          color: "var(--muted)",
           padding: "12px",
           borderRadius: "4px",
           minHeight: "80px",
@@ -481,7 +481,7 @@ function MyTodo() {
         {nginxResult ? (
           <pre style={{ margin: 0 }}>{nginxResult}</pre>
         ) : (
-          <Text style={{ color: "#5c6370" }}>等待请求数据...</Text>
+          <Text style={{ color: "var(--muted)" }}>等待请求数据...</Text>
         )}
       </div>
 
@@ -530,13 +530,13 @@ function MyTodo() {
           </Button>
           <div
             style={{
-              background: "#fffbe6",
-              border: "1px solid #ffe58f",
+              background: "var(--warning-bg)",
+              border: "1px solid var(--warning-border)",
               padding: "12px",
               borderRadius: "4px",
               marginTop: "12px",
               whiteSpace: "pre-wrap",
-              color: "#d46b08",
+              color: "var(--warning)",
             }}
           >
             {domainResult || "点击上方按钮尝试读取数据"}
@@ -549,7 +549,7 @@ function MyTodo() {
             style={{
               width: "100%",
               height: "150px",
-              border: "1px solid #d9d9d9",
+              border: "1px solid var(--border)",
               borderRadius: "4px",
             }}
           />
@@ -594,12 +594,12 @@ function MyTodo() {
           </Button>
           <div
             style={{
-              background: "#e6f7ff",
-              border: "1px solid #91d5ff",
+              background: "var(--info-bg)",
+              border: "1px solid var(--info-border)",
               padding: "12px",
               borderRadius: "4px",
               whiteSpace: "pre-wrap",
-              color: "#096dd9",
+              color: "var(--accent)",
             }}
           >
             {windowNameResult || "点击按钮尝试读取"}
@@ -613,7 +613,7 @@ function MyTodo() {
             style={{
               width: "100%",
               height: "180px",
-              border: "1px solid #d9d9d9",
+              border: "1px solid var(--border)",
               borderRadius: "4px",
             }}
           />
@@ -654,12 +654,12 @@ function MyTodo() {
           </Button>
           <div
             style={{
-              background: "#fff2f0",
-              border: "1px solid #ffccc7",
+              background: "var(--error-bg)",
+              border: "1px solid var(--error-bg)",
               padding: "12px",
               borderRadius: "4px",
               whiteSpace: "pre-wrap",
-              color: "#cf1322",
+              color: "var(--error)",
             }}
           >
             {hashResult
@@ -674,7 +674,7 @@ function MyTodo() {
             style={{
               width: "100%",
               height: "180px",
-              border: "1px solid #d9d9d9",
+              border: "1px solid var(--border)",
               borderRadius: "4px",
             }}
           />
@@ -691,7 +691,7 @@ function MyTodo() {
         WebSocket 是一种双向通信协议，它在建立连接时通过 HTTP 发起握手（Upgrade
         请求）。
         <br />
-        <Text strong style={{ color: "#1890ff" }}>
+        <Text strong style={{ color: "var(--accent)" }}>
           非常重要的一点：WebSocket 协议本身并不受同源策略（Same-Origin
           Policy）的限制！
         </Text>
@@ -733,26 +733,26 @@ function MyTodo() {
 
           <div
             style={{
-              background: "#282c34",
+              background: "var(--bg)",
               padding: "12px",
               borderRadius: "4px",
               height: "200px",
               overflowY: "auto",
               fontFamily: "monospace",
-              color: "#abb2bf",
+              color: "var(--muted)",
             }}
           >
             {wsMessages.length === 0 ? (
-              <Text style={{ color: "#5c6370" }}>
+              <Text style={{ color: "var(--muted)" }}>
                 暂无消息，请先建立连接...
               </Text>
             ) : (
               wsMessages.map((msg, idx) => {
-                let color = "#abb2bf"; // 默认灰白
-                if (msg.includes("[系统]")) color = "#e5c07b"; // 黄色
-                if (msg.includes("[系统错误]")) color = "#e06c75"; // 红色
-                if (msg.includes("[我]")) color = "#98c379"; // 绿色
-                if (msg.includes("[服务端回复]")) color = "#61afef"; // 蓝色
+                let color = "var(--muted)"; // 默认灰白
+                if (msg.includes("[系统]")) color = "var(--warning)"; // 黄色
+                if (msg.includes("[系统错误]")) color = "var(--error)"; // 红色
+                if (msg.includes("[我]")) color = "var(--success)"; // 绿色
+                if (msg.includes("[服务端回复]")) color = "var(--accent)"; // 蓝色
 
                 return (
                   <div key={idx} style={{ marginBottom: "6px", color }}>
@@ -766,7 +766,7 @@ function MyTodo() {
         <div style={{ flex: 1 }}>
           <div
             style={{
-              background: "#f5f5f5",
+              background: "var(--surface)",
               padding: "16px",
               borderRadius: "4px",
               height: "100%",
@@ -819,7 +819,7 @@ function MyTodo() {
 
           <div
             style={{
-              background: "#f5f5f5",
+              background: "var(--surface)",
               padding: "10px",
               borderRadius: "4px",
               height: "200px",
@@ -837,7 +837,7 @@ function MyTodo() {
                   key={index}
                   style={{
                     marginBottom: "4px",
-                    color: msg.includes("[来自") ? "#1890ff" : "#52c41a",
+                    color: msg.includes("[来自") ? "var(--accent)" : "var(--success)",
                   }}
                 >
                   {msg}
@@ -857,7 +857,7 @@ function MyTodo() {
             style={{
               width: "100%",
               height: "250px",
-              border: "1px solid #d9d9d9",
+              border: "1px solid var(--border)",
               borderRadius: "4px",
             }}
           />

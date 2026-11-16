@@ -30,7 +30,7 @@ const UserProfile = ({ userId }: { userId: number }) => {
         display: "flex",
         alignItems: "center",
         gap: "16px",
-        background: "#f5f5f5",
+        background: "var(--surface)",
         padding: "16px",
         borderRadius: "8px",
       }}
@@ -40,7 +40,7 @@ const UserProfile = ({ userId }: { userId: number }) => {
         <h3 style={{ margin: 0 }}>
           {user.first_name} {user.last_name}
         </h3>
-        <p style={{ margin: "4px 0 0 0", color: "#666" }}>邮箱: {user.email}</p>
+        <p style={{ margin: "4px 0 0 0", color: "var(--muted)" }}>邮箱: {user.email}</p>
       </div>
     </div>
   );

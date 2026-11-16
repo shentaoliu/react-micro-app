@@ -24,9 +24,9 @@ const ResourcePreloader = () => {
     <div
       style={{
         padding: "16px",
-        background: "#e6f4ff",
+        background: "var(--info-bg)",
         borderRadius: "8px",
-        border: "1px solid #91caff",
+        border: "1px solid var(--info-border)",
       }}
     >
       <Text strong type="success">
@@ -111,7 +111,7 @@ const HeavyResourceRenderer = () => {
             style={{
               marginTop: "12px",
               padding: "8px",
-              background: "#f0f0f0",
+              background: "var(--surface)",
               borderRadius: "4px",
               fontSize: "12px",
             }}
@@ -132,7 +132,7 @@ const ResourcePreloadTest: React.FC = () => {
   return (
     <Card
       title="10. 资源预加载 API (Resource Preloading)"
-      style={{ marginBottom: "24px", borderColor: "#13c2c2" }}
+      style={{ marginBottom: "24px", borderColor: "var(--accent)" }}
     >
       <Paragraph>
         <strong>面试考点：</strong> 在 React 19

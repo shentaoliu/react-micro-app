@@ -58,7 +58,7 @@ const BigDataReviewList: React.FC = () => {
               <Card.Meta
                 avatar={
                   <DatabaseOutlined
-                    style={{ fontSize: "24px", color: "#1677ff" }}
+                    style={{ fontSize: "24px", color: "var(--accent)" }}
                   />
                 }
                 title={topic.title}
@@ -66,7 +66,7 @@ const BigDataReviewList: React.FC = () => {
                   <div
                     style={{
                       marginTop: "8px",
-                      color: "#666",
+                      color: "var(--muted)",
                       fontSize: "13px",
                       flex: 1,
                     }}

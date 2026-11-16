@@ -100,7 +100,7 @@ const VirtualListDemo: React.FC = () => {
         style={{
           height: `${CONTAINER_HEIGHT}px`,
           overflowY: "auto",
-          border: "1px solid #d9d9d9",
+          border: "1px solid var(--border)",
           borderRadius: "8px",
           position: "relative",
         }}
@@ -126,8 +126,8 @@ const VirtualListDemo: React.FC = () => {
                 height: `${ITEM_HEIGHT}px`,
                 lineHeight: `${ITEM_HEIGHT}px`,
                 padding: "0 16px",
-                borderBottom: "1px solid #f0f0f0",
-                background: item.id % 2 === 0 ? "#fafafa" : "#fff",
+                borderBottom: "1px solid var(--surface)",
+                background: item.id % 2 === 0 ? "var(--surface)" : "var(--bg)",
                 boxSizing: "border-box",
               }}
             >

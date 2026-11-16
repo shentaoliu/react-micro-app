@@ -25,7 +25,7 @@ const BlogPost = ({ post }: { post: (typeof POSTS)[0] }) => {
     <div
       style={{
         padding: "16px",
-        background: "#f5f5f5",
+        background: "var(--surface)",
         borderRadius: "8px",
         marginTop: "16px",
       }}
@@ -57,7 +57,7 @@ const DocumentHeadTest: React.FC = () => {
   return (
     <Card
       title="9. 文档元数据支持 (Document Metadata)"
-      style={{ marginBottom: "24px", borderColor: "#faad14" }}
+      style={{ marginBottom: "24px", borderColor: "var(--warning)" }}
     >
       <Paragraph>
         <strong>面试考点：</strong> 以前为了做 SEO

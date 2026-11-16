@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Card, Typography, Divider, Button, Alert, Space } from "antd";
 
-const { Title, Paragraph, Text } = Typography;
+const { Paragraph, Text } = Typography;
 
 const TimeSlicingDemo: React.FC = () => {
   const [renderCount, setRenderCount] = useState(0);
@@ -35,8 +35,8 @@ const TimeSlicingDemo: React.FC = () => {
         for (let i = 0; i < pageCount; i++) {
           let li = document.createElement("li");
           li.style.padding = "8px 16px";
-          li.style.borderBottom = "1px solid #f0f0f0";
-          li.style.background = i % 2 === 0 ? "#fafafa" : "#fff";
+          li.style.borderBottom = "1px solid var(--surface)";
+          li.style.background = i % 2 === 0 ? "var(--surface)" : "var(--bg)";
           li.innerHTML = `我是数据节点 ID: ${~~(Math.random() * total)} (剩余 ${curTotal - pageCount} 条)`;
           fragment.appendChild(li); // 先挂载到虚拟碎片上
         }
@@ -89,7 +89,7 @@ const TimeSlicingDemo: React.FC = () => {
         style={{
           height: "400px",
           overflowY: "auto",
-          border: "1px solid #d9d9d9",
+          border: "1px solid var(--border)",
           borderRadius: "8px",
         }}
       >
@@ -101,7 +101,7 @@ const TimeSlicingDemo: React.FC = () => {
           ref={containerRef}
           style={{ margin: 0, padding: 0, listStyle: "none" }}
         >
-          <div style={{ padding: "24px", textAlign: "center", color: "#999" }}>
+          <div style={{ padding: "24px", textAlign: "center", color: "var(--muted)" }}>
             暂无数据，请点击上方按钮加载
           </div>
         </ul>

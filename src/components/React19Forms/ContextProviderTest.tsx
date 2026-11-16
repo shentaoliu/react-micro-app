@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Card, Typography, Switch, Space, Divider, Alert } from 'antd';
+import { Card, Typography, Switch, Space, Alert } from 'antd';
 
 const { Paragraph, Text } = Typography;
 
@@ -12,9 +12,9 @@ const ThemeConsumer: React.FC = () => {
   return (
     <div style={{
       padding: '16px',
-      background: theme === 'dark' ? '#333' : '#fff',
-      color: theme === 'dark' ? '#fff' : '#000',
-      border: '1px solid #ccc',
+      background: theme === 'dark' ? 'var(--bg)' : 'var(--bg)',
+      color: "var(--text-h)",
+      border: '1px solid var(--border)',
       borderRadius: '8px',
       transition: 'all 0.3s'
     }}>
@@ -28,7 +28,7 @@ const ContextProviderTest: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   return (
-    <Card title="8. Context 直接作为 Provider (React 19 新特性)" style={{ marginBottom: "24px", borderColor: '#722ed1' }}>
+    <Card title="8. Context 直接作为 Provider (React 19 新特性)" style={{ marginBottom: "24px", borderColor: 'var(--accent)' }}>
       <Paragraph>
         <strong>面试考点：</strong> 在 React 19 之前，我们需要使用 <code>&lt;Context.Provider value=&#123;...&#125;&gt;</code> 来包裹子组件。<br/>
         在 React 19 中，你可以直接将 Context 本身渲染为 Provider：<code>&lt;Context value=&#123;...&#125;&gt;</code>。
@@ -45,7 +45,7 @@ const ContextProviderTest: React.FC = () => {
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
         
         {/* 旧写法演示 */}
-        <div style={{ padding: '16px', background: '#f5f5f5', borderRadius: '8px' }}>
+        <div style={{ padding: '16px', background: 'var(--surface)', borderRadius: '8px' }}>
           <Space style={{ marginBottom: '16px' }}>
             <Text strong>1. 旧写法：使用 ThemeContext.Provider</Text>
             <Switch 
@@ -62,7 +62,7 @@ const ContextProviderTest: React.FC = () => {
         </div>
 
         {/* 新写法演示 */}
-        <div style={{ padding: '16px', background: '#f9f0ff', borderRadius: '8px', border: '1px solid #d3adf7' }}>
+        <div style={{ padding: '16px', background: 'var(--info-bg)', borderRadius: '8px', border: '1px solid var(--info-border)' }}>
           <Space style={{ marginBottom: '16px' }}>
             <Text strong>2. 新写法：直接使用 ThemeContext</Text>
             <Switch 

@@ -120,7 +120,7 @@ function VirtualList({ data, itemHeight = 50 }: VirtualListProps) {
     </Typography.Paragraph>
     <div
       ref={containerRef}
-      style={{ height: containerHeight, overflowY: "auto", background: "#f9fafb", border: "1px solid #d9d9d9", borderRadius: 8 }}
+      style={{ height: containerHeight, overflowY: "auto", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8 }}
       onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}
     >
       {/* 占位层保留全部数据的滚动高度。 */}
@@ -146,10 +146,10 @@ function VirtualList({ data, itemHeight = 50 }: VirtualListProps) {
                 }
               }}
               style={{
-                borderBottom: "1px solid #e5e7eb",
+                borderBottom: "1px solid var(--border)",
                 padding: 16,
                 textAlign: "left",
-                background: item.id % 2 === 0 ? "#fafafa" : "white",
+                background: item.id % 2 === 0 ? "var(--surface)" : "var(--bg)",
                 overflowWrap: "anywhere",
               }}
             >

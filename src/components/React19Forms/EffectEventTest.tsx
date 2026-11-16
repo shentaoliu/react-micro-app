@@ -69,15 +69,15 @@ const EffectEventTest: React.FC = () => {
       title="11. useEffectEvent 实验性特性"
       style={{
         marginBottom: "24px",
-        borderColor: "#eb2f96",
-        background: theme === "dark" ? "#2c2c2c" : "#fff",
-        color: theme === "dark" ? "#fff" : "inherit",
+        borderColor: "var(--accent)",
+        background: theme === "dark" ? "var(--bg)" : "var(--bg)",
+        color: "var(--text-h)",
         transition: "all 0.3s",
       }}
     >
       <Paragraph
         style={{
-          color: theme === "dark" ? "rgba(255,255,255,0.85)" : "inherit",
+          color: "var(--text-h)",
         }}
       >
         <strong>面试考点：</strong> <code>useEffect</code>{" "}
@@ -87,7 +87,7 @@ const EffectEventTest: React.FC = () => {
       </Paragraph>
       <Paragraph
         style={{
-          color: theme === "dark" ? "rgba(255,255,255,0.85)" : "inherit",
+          color: "var(--text-h)",
         }}
       >
         <strong>useEffectEvent：</strong> 它允许你提取一段“事件处理逻辑”。在{" "}
@@ -134,8 +134,8 @@ const EffectEventTest: React.FC = () => {
         <div
           style={{
             marginTop: "16px",
-            background: "#1e1e1e",
-            color: "#4af626",
+            background: "var(--bg)",
+            color: "var(--success)",
             padding: "16px",
             borderRadius: "8px",
             fontFamily: "monospace",
@@ -147,7 +147,7 @@ const EffectEventTest: React.FC = () => {
             <div key={i}>{log}</div>
           ))}
           {logs.length === 0 && (
-            <div style={{ color: "#666" }}>暂无日志...</div>
+            <div style={{ color: "var(--muted)" }}>暂无日志...</div>
           )}
         </div>
       </Space>

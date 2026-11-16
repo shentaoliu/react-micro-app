@@ -1,5 +1,6 @@
+import { useSkin } from "./theme";
 import React, { useState, useMemo } from "react";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu, theme, Select, ColorPicker, Space, Button } from "antd";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import {
   DesktopOutlined,
@@ -66,6 +67,7 @@ const sideMenuMap: Record<string, MenuItem[]> = {
     getItem("自定义Hook", "custom-hooks", <ApiOutlined />),
     getItem("React复习示例", "react-review", <BookOutlined />),
     getItem("大数据渲染", "big-data", <DatabaseOutlined />),
+    getItem("响应式渲染系统", "reactive-rendering", <ApiOutlined />),
   ],
   [TOP_MENU_KEYS.APPS]: [
     getItem("微前端子应用", "apps-micro", <DesktopOutlined />, [
@@ -85,6 +87,8 @@ const sideMenuMap: Record<string, MenuItem[]> = {
 };
 
 const App: React.FC = () => {
+  // 这里只更新配置；持久化、广播以及组件样式更新由 SkinProvider 统一处理。
+  const { skin, setSkin } = useSkin();
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -132,7 +136,7 @@ const App: React.FC = () => {
           <img src={reactLogo} alt="Logo" style={{ height: "32px" }} />
           <span
             style={{
-              color: "white",
+              color: "var(--text-h)",
               marginLeft: "12px",
               fontSize: "16px",
               fontWeight: "bold",
@@ -149,6 +153,15 @@ const App: React.FC = () => {
           items={topMenuItems}
           style={{ flex: 1, minWidth: 0, marginLeft: "40px" }}
         />
+        {/* 修改一个配置字段时保留另一个字段；颜色统一转成六位 hex，与消息校验规则一致。 */}
+        <Space>
+          <Select aria-label="主题模式" value={skin.mode} style={{ width: 100 }}
+            options={[{ value: "light", label: "浅色" }, { value: "dark", label: "深色" }]}
+            onChange={(mode) => setSkin({ ...skin, mode })} />
+          <ColorPicker aria-label="主题色" value={skin.color} disabledAlpha
+            onChange={color => setSkin({ ...skin, color: color.toHexString() })} />
+          <Button onClick={() => setSkin({ mode: "light", color: "#1677ff" })}>重置皮肤</Button>
+        </Space>
       </Header>
 
       <Layout>

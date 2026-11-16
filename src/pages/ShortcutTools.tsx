@@ -141,7 +141,7 @@ function ShortcutTools() {
             </Space.Compact>
             <Divider>评论列表</Divider>
             <div
-              style={{ padding: 16, background: "#f5f5f5", borderRadius: 4 }}
+              style={{ padding: 16, background: "var(--surface)", borderRadius: 4 }}
             >
               {storedXss.length === 0 ? (
                 <Text type="secondary">暂无评论</Text>
@@ -151,7 +151,7 @@ function ShortcutTools() {
                   key={index}
                   style={{
                     marginBottom: 16,
-                    borderBottom: "1px dashed #ddd",
+                    borderBottom: "1px dashed var(--border)",
                     paddingBottom: 8,
                   }}
                 >
@@ -214,7 +214,7 @@ function ShortcutTools() {
           <Paragraph>
             <strong>模拟场景：</strong> 假设你在银行网站登录了（有了
             Cookie），然后你不小心访问了一个恶意网页，里面有一段隐藏代码：
-            <pre style={{ background: "#fafafa", padding: 8, marginTop: 8 }}>
+            <pre style={{ background: "var(--surface)", padding: 8, marginTop: 8 }}>
               {`<form action="http://bank.com/transfer" method="POST" id="hackForm">
   <input type="hidden" name="toAccount" value="HackerAccount" />
   <input type="hidden" name="amount" value="10000" />

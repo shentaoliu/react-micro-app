@@ -13,13 +13,13 @@ const { Title, Paragraph, Text } = Typography;
 // --- 新增：用于演示 React.memo 的子组件 ---
 
 // 1. 普通组件（父组件渲染，它一定渲染）
-const NormalChild = ({ dsType, info }: { dsType: string; info: any }) => {
+const NormalChild = ({ dsType }: { dsType: string; info: any }) => {
   const renderTime = new Date().toLocaleTimeString();
   return (
     <div
       style={{
         padding: 8,
-        border: "1px solid #ff4d4f",
+        border: "1px solid var(--error)",
         borderRadius: 4,
         marginBottom: 8,
       }}
@@ -37,13 +37,13 @@ const NormalChild = ({ dsType, info }: { dsType: string; info: any }) => {
 
 // 2. 默认的 React.memo 组件（浅层比较 props）
 const MemoChild = React.memo(
-  ({ dsType, info }: { dsType: string; info: any }) => {
+  ({ dsType }: { dsType: string; info: any }) => {
     const renderTime = new Date().toLocaleTimeString();
     return (
       <div
         style={{
           padding: 8,
-          border: "1px solid #faad14",
+          border: "1px solid var(--warning)",
           borderRadius: 4,
           marginBottom: 8,
         }}
@@ -62,10 +62,10 @@ const MemoChild = React.memo(
 
 // 3. 自定义比较函数的 React.memo 组件
 const CustomMemoChild = React.memo(
-  ({ dsType, info }: { dsType: string; info: any }) => {
+  ({ dsType }: { dsType: string; info: any }) => {
     const renderTime = new Date().toLocaleTimeString();
     return (
-      <div style={{ padding: 8, border: "1px solid #52c41a", borderRadius: 4 }}>
+      <div style={{ padding: 8, border: "1px solid var(--success)", borderRadius: 4 }}>
         <div>
           <Text type="success" strong>
             React.memo (自定义深比较)
@@ -94,7 +94,7 @@ class ClassChild extends Component<ClassChildProps> {
   // 面试考点：shouldComponentUpdate 的返回值决定了组件是否要重新 render
   // 返回 true -> 重新渲染 (默认行为)
   // 返回 false -> 跳过渲染 (性能优化)
-  shouldComponentUpdate(nextProps: ClassChildProps, nextState: any) {
+  shouldComponentUpdate(nextProps: ClassChildProps, _nextState: any) {
     // 我们的优化逻辑：只要 dsType 没变，就不重新渲染，忽略 info 对象引用的变化
     if (this.props.dsType === nextProps.dsType) {
       return false; // 拦截渲染！
@@ -108,13 +108,13 @@ class ClassChild extends Component<ClassChildProps> {
       <div
         style={{
           padding: 8,
-          border: "1px solid #1890ff",
+          border: "1px solid var(--accent)",
           borderRadius: 4,
           marginTop: 8,
         }}
       >
         <div>
-          <Text strong style={{ color: "#1890ff" }}>
+          <Text strong style={{ color: "var(--accent)" }}>
             Class 组件 (shouldComponentUpdate)
           </Text>
         </div>
@@ -142,7 +142,7 @@ const IdComponent = () => {
         style={{
           flex: 1,
           padding: 12,
-          border: "1px solid #d9d9d9",
+          border: "1px solid var(--border)",
           borderRadius: 4,
         }}
       >
@@ -162,7 +162,7 @@ const IdComponent = () => {
           style={{
             marginTop: 8,
             fontSize: 12,
-            color: "#888",
+            color: "var(--muted)",
             wordBreak: "break-all",
           }}
         >
@@ -174,9 +174,9 @@ const IdComponent = () => {
         style={{
           flex: 1,
           padding: 12,
-          border: "1px dashed #ff4d4f",
+          border: "1px dashed var(--error)",
           borderRadius: 4,
-          background: "#fff2f0",
+          background: "var(--error-bg)",
         }}
       >
         <div>
@@ -197,7 +197,7 @@ const IdComponent = () => {
           style={{
             marginTop: 8,
             fontSize: 12,
-            color: "#888",
+            color: "var(--muted)",
             wordBreak: "break-all",
           }}
         >
@@ -309,7 +309,7 @@ function ReactTest() {
                 ref={effectRef}
                 style={{
                   height: 100,
-                  background: "#ffccc7",
+                  background: "var(--error-bg)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -323,7 +323,7 @@ function ReactTest() {
               <Button type="primary" danger onClick={() => setCountEffect(0)}>
                 重置为 0 (触发 Effect)
               </Button>
-              <Paragraph style={{ marginTop: 8, fontSize: 12, color: "#888" }}>
+              <Paragraph style={{ marginTop: 8, fontSize: 12, color: "var(--muted)" }}>
                 当你点击重置时，状态先变为 0。React 将 0 渲染到屏幕上。
                 <br />
                 接着 <code>useEffect</code> 执行，发现是
@@ -343,7 +343,7 @@ function ReactTest() {
                 ref={layoutRef}
                 style={{
                   height: 100,
-                  background: "#d9f7be",
+                  background: "var(--success-bg)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -356,12 +356,12 @@ function ReactTest() {
               </div>
               <Button
                 type="primary"
-                style={{ background: "#52c41a" }}
+                style={{ background: "var(--success)" }}
                 onClick={() => setCountLayout(0)}
               >
                 重置为 0 (触发 LayoutEffect)
               </Button>
-              <Paragraph style={{ marginTop: 8, fontSize: 12, color: "#888" }}>
+              <Paragraph style={{ marginTop: 8, fontSize: 12, color: "var(--muted)" }}>
                 点击重置，状态变为 0，React 更新 DOM 但
                 <strong>先不绘制到屏幕</strong>。
                 <br />
@@ -409,8 +409,8 @@ function ReactTest() {
           <Card type="inner" title="执行日志 (依赖数组为 [])">
             <div
               style={{
-                background: "#000",
-                color: "#0f0",
+                background: "var(--bg)",
+                color: "var(--success)",
                 padding: 16,
                 borderRadius: 4,
                 fontFamily: "monospace",
@@ -428,7 +428,7 @@ function ReactTest() {
             >
               清空日志
             </Button>
-            <Paragraph style={{ marginTop: 8, fontSize: 12, color: "#888" }}>
+            <Paragraph style={{ marginTop: 8, fontSize: 12, color: "var(--muted)" }}>
               注：如果你看到输出了三行（Mount, Unmount,
               Mount），说明你的项目入口 (main.tsx) 开启了 StrictMode。
               如果你只看到一行 (Mount)，说明 StrictMode 未开启。
@@ -481,7 +481,7 @@ function ReactTest() {
                 <br />
                 传递给子组件的 dsType: <strong>{dsType}</strong>
                 <br />
-                传递给子组件的 info:{" "}
+                传递给子组件的 _info:{" "}
                 <code>{`{ desc: '固定对象，但引用每次不同' }`}</code>
               </Paragraph>
               <Space direction="vertical" style={{ width: "100%" }}>
@@ -508,7 +508,7 @@ function ReactTest() {
             <Card
               type="inner"
               title="子组件渲染表现 (观察渲染时间变化)"
-              style={{ flex: 1, background: "#fafafa" }}
+              style={{ flex: 1, background: "var(--surface)" }}
             >
               <NormalChild
                 dsType={dsType}
@@ -570,7 +570,7 @@ function ReactTest() {
           />
 
           <Card type="inner" title="表单 ID 绑定演示">
-            <Paragraph style={{ color: "#888", marginBottom: 16 }}>
+            <Paragraph style={{ color: "var(--muted)", marginBottom: 16 }}>
               你可以尝试点击下面的文字标签（"邮箱："），只要 ID
               绑定正确，输入框就会自动获得焦点。
               在纯客户端渲染（CSR）下，两者表现看起来一样；但在 SSR 框架（如
@@ -594,14 +594,14 @@ function ReactTest() {
               应用，它们可能会生成相同的 <code>:r0:</code>、<code>:r1:</code>
               ，导致整个页面的 ID 冲突！
             </Paragraph>
-            <Paragraph strong style={{ color: "#1890ff" }}>
+            <Paragraph strong style={{ color: "var(--accent)" }}>
               解决方案：在挂载应用时，传入 identifierPrefix 配置项，给生成的 ID
               加前缀。
             </Paragraph>
             <div
               style={{
-                background: "#2b2b2b",
-                color: "#fff",
+                background: "var(--bg)",
+                color: "var(--text-h)",
                 padding: 16,
                 borderRadius: 4,
                 fontFamily: "monospace",
@@ -609,38 +609,38 @@ function ReactTest() {
                 overflowX: "auto",
               }}
             >
-              <span style={{ color: "#c678dd" }}>import</span>{" "}
-              {`{ createRoot }`} <span style={{ color: "#c678dd" }}>from</span>{" "}
-              <span style={{ color: "#98c379" }}>'react-dom/client'</span>;
+              <span style={{ color: "var(--accent)" }}>import</span>{" "}
+              {`{ createRoot }`} <span style={{ color: "var(--accent)" }}>from</span>{" "}
+              <span style={{ color: "var(--success)" }}>'react-dom/client'</span>;
               <br />
               <br />
-              <span style={{ color: "#5c6370" }}>
+              <span style={{ color: "var(--muted)" }}>
                 // 应用 A：生成的 ID 会是 :app1-r0:
               </span>
               <br />
-              <span style={{ color: "#61afef" }}>createRoot</span>
+              <span style={{ color: "var(--accent)" }}>createRoot</span>
               (document.getElementById(
-              <span style={{ color: "#98c379" }}>'root-a'</span>), {`{`}
+              <span style={{ color: "var(--success)" }}>'root-a'</span>), {`{`}
               <br />
               &nbsp;&nbsp;identifierPrefix:{" "}
-              <span style={{ color: "#98c379" }}>'app1-'</span>
+              <span style={{ color: "var(--success)" }}>'app1-'</span>
               <br />
-              {`}`}).render(&lt;<span style={{ color: "#e06c75" }}>App1</span>{" "}
+              {`}`}).render(&lt;<span style={{ color: "var(--error)" }}>App1</span>{" "}
               /&gt;);
               <br />
               <br />
-              <span style={{ color: "#5c6370" }}>
+              <span style={{ color: "var(--muted)" }}>
                 // 应用 B：生成的 ID 会是 :app2-r0:，完美避免冲突
               </span>
               <br />
-              <span style={{ color: "#61afef" }}>createRoot</span>
+              <span style={{ color: "var(--accent)" }}>createRoot</span>
               (document.getElementById(
-              <span style={{ color: "#98c379" }}>'root-b'</span>), {`{`}
+              <span style={{ color: "var(--success)" }}>'root-b'</span>), {`{`}
               <br />
               &nbsp;&nbsp;identifierPrefix:{" "}
-              <span style={{ color: "#98c379" }}>'app2-'</span>
+              <span style={{ color: "var(--success)" }}>'app2-'</span>
               <br />
-              {`}`}).render(&lt;<span style={{ color: "#e06c75" }}>App2</span>{" "}
+              {`}`}).render(&lt;<span style={{ color: "var(--error)" }}>App2</span>{" "}
               /&gt;);
             </div>
           </Card>

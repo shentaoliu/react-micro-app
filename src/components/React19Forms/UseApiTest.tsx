@@ -1,4 +1,4 @@
-import React, { use, Suspense, useState, startTransition } from "react";
+import React, { use, Suspense, useState } from "react";
 import { Card, Typography, Button, Switch, Space, Alert, Skeleton } from "antd";
 
 const { Paragraph, Text } = Typography;
@@ -35,7 +35,7 @@ const UserInfo = ({ userPromise }: { userPromise: Promise<any> }) => {
 
   return (
     <div
-      style={{ padding: "12px", background: "#f5f5f5", borderRadius: "4px" }}
+      style={{ padding: "12px", background: "var(--surface)", borderRadius: "4px" }}
     >
       <p>
         <strong>姓名：</strong>
@@ -92,8 +92,8 @@ const LegacyContextConsumer = ({ showTheme }: { showTheme: boolean }) => {
     <div
       style={{
         padding: "8px",
-        background: theme === "dark" ? "#333" : "#f0f0f0",
-        color: theme === "dark" ? "#fff" : "#000",
+        background: theme === "dark" ? "var(--bg)" : "var(--surface)",
+        color: "var(--text-h)",
         borderRadius: "4px",
         marginTop: "8px",
         fontSize: "12px",
@@ -122,9 +122,9 @@ const ContextConsumer = ({ showTheme }: { showTheme: boolean }) => {
     <div
       style={{
         padding: "12px",
-        background: theme === "dark" ? "#333" : "#fff",
-        color: theme === "dark" ? "#fff" : "#000",
-        border: "1px solid #ccc",
+        background: theme === "dark" ? "var(--bg)" : "var(--bg)",
+        color: "var(--text-h)",
+        border: "1px solid var(--border)",
         borderRadius: "4px",
         marginTop: "8px",
       }}
@@ -162,7 +162,7 @@ const UseApiTest: React.FC = () => {
   return (
     <Card
       title="6. 革命性的 API：use(Promise) 与 Suspense"
-      style={{ marginBottom: "24px", borderColor: "#1677ff" }}
+      style={{ marginBottom: "24px", borderColor: "var(--accent)" }}
     >
       <Paragraph>
         <strong>面试考点 1：替代 useEffect 获取数据</strong>
