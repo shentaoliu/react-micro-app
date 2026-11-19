@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "../App";
 import WorkspaceOverview from "../pages/WorkspaceOverview";
 import PlaceholderPage from "../pages/PlaceholderPage";
+import SubAppA from "../pages/SubAppA";
 import MyTodo from "../pages/MyTodo";
 import ShortcutTools from "../pages/ShortcutTools";
 import StyleTest from "../pages/StyleTest";
@@ -89,7 +90,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "sub-a",
-            element: <PlaceholderPage title="子应用 A" />,
+            element: <SubAppA />,
           },
           {
             path: "sub-b",
